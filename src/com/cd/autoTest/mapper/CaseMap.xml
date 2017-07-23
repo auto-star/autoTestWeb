@@ -1,0 +1,104 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC 
+"-//mybatis.org//DTD Mapper 3.0//EN" 
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.cd.autoTest.dao.CaseDAO">
+	<resultMap type="Case" id="resultMap">
+		<id property="id" column="id" />
+		<result property="name" column="name" />
+		<result property="comment" column="comment" />
+		<result property="projectId" column="projectId" />
+		<result property="projectName" column="projectName" />
+		<result property="category" column="category" />
+		<result property="categoryName" column="categoryName" />
+		<result property="userId" column="userId" />
+		<result property="userName" column="userName" />
+		<result property="insertTime" column="insertTime" />
+		<result property="updateTime" column="updateTime" />
+		<result property="pageStart" column="pageStart" />
+		<result property="pageSize" column="pageSize" />
+	</resultMap>
+	<select id="findCaseList" resultMap="resultMap"  parameterType="Case" >
+		select t.*,tp.name projectName,tc1.name categoryName,tu.name userName from t_case t
+		left join t_category tc1 on t.category=tc1.id
+		left join t_project tp on t.projectId=tp.id
+		left join t_user tu on t.userId=tu.id where 1=1
+		<if test="userId != null">  
+            <![CDATA[  
+              and t.userId = #{userId}  
+            ]]>  
+        </if>
+        <if test="name != null and '' != name">  
+            <![CDATA[  
+              and t.name like concat('%',#{name},'%')
+            ]]>  
+        </if>
+        <if test="category != null and '' != category">  
+            <![CDATA[  
+              and t.category=#{category}
+            ]]>  
+        </if>
+        <if test="projectId != null and '' != projectId">  
+            <![CDATA[  
+              and t.projectId=#{projectId}
+            ]]>  
+        </if>
+		order by t.updateTime desc
+		<if test="pageStart != null and pageSize !=null">
+			limit #{pageStart},#{pageSize}
+		</if>
+	</select>
+	<select id="findCaseCount" resultType="Integer"  parameterType="Case" >
+		select count(1) from (select t.*,tc.name projectName,tc1.name categoryName,tu.name userName from t_case t
+		left join t_category tc1 on t.category=tc1.id
+		left join t_project tc on t.projectId=tc.id
+		left join t_user tu on t.userId=tu.id where 1=1
+		<if test="userId != null and '' != userId">  
+            <![CDATA[  
+              and t.userId = #{userId}  
+            ]]>  
+        </if>
+        <if test="name != null and '' != name">  
+            <![CDATA[  
+              and t.name like concat('%',#{name},'%')
+            ]]>  
+        </if>
+        <if test="category != null and '' != category">  
+            <![CDATA[  
+              and t.category=#{category}
+            ]]>  
+        </if>
+        <if test="projectId != null and '' != projectId">  
+            <![CDATA[  
+              and t.projectId=#{projectId}
+            ]]>  
+        </if>
+		)tt
+	</select>
+	<select id="findCaseListByUserId" resultMap="resultMap"  parameterType="Integer" >
+		select t.*,tc.name projectName,tc1.name categoryName,tu.name userName from t_case t
+		left join t_category tc1 on t.category=tc1.id
+		left join t_project tc on t.projectId=tc.id
+		left join t_user tu on t.userId=tu.id 
+		where t.userId=#{userId}
+	</select>
+	<select id="findCaseById" parameterType="Integer"  resultMap="resultMap">
+		select * from t_case t where t.id=#{id}
+	</select>
+	<insert id="insertCase" parameterType="Case">
+		insert into t_case(name,comment,projectId,category,userId,insertTime,updateTime)
+		values(#{name},#{comment},#{projectId},#{category},#{userId},#{insertTime,jdbcType=TIMESTAMP},#{updateTime,jdbcType=TIMESTAMP})
+		<selectKey resultType="Integer" keyProperty="id" order="AFTER">  
+        	SELECT LAST_INSERT_ID() AS id  
+    	</selectKey> 
+	</insert>
+	<delete id="deleteCase" parameterType="Integer">
+		delete from t_case where id=#{id}
+	</delete>
+	<update id="updateCase" parameterType="Case">
+		update t_case set name=#{name} , comment=#{comment},
+		 projectId=#{projectId} ,category=#{category},updateTime=#{updateTime,jdbcType=TIMESTAMP}
+		where id=#{id}
+	</update>
+</mapper>  
+

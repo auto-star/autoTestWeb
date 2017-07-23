@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC 
+"-//mybatis.org//DTD Mapper 3.0//EN" 
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.cd.autoTest.dao.UserGroupDAO">
+	<resultMap type="UserGroup" id="resultMap">
+		<id property="id" column="id" />
+		<result property="name" column="name" />
+	</resultMap>
+	<select id="findUserGroupList" resultMap="resultMap">
+		select * from t_usergroup
+		
+	</select>
+	<insert id="insertUserGroup" parameterType="UserGroup">
+		insert into t_usergroup(name)
+		values(#{name})
+	</insert>
+	<update id="updateUserGroup" parameterType="UserGroup">
+		update t_usergroup set name=#{name} where id=#{id}
+	</update>
+	<select id="findUserGroupById" parameterType="Integer" resultMap="resultMap">
+		select t.* from t_usergroup t where t.id=#{id}
+	</select>
+	<delete id="deleteUserGroup" parameterType="Integer">
+		delete from t_usergroup where id=#{id}
+	</delete>
+</mapper>  
+

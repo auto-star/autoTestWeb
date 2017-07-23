@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC 
+"-//mybatis.org//DTD Mapper 3.0//EN" 
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.cd.autoTest.dao.GroupDAO">
+	<resultMap type="Group" id="resultMap">
+		<id property="id" column="id" />
+		<result property="name" column="name" />
+		<result property="code" column="code" />
+		<result property="projectId" column="projectId" />
+		<result property="parentGroupId" column="parentGroupId" />
+		<result property="parentGroupName" column="parentGroupName" />
+	</resultMap>
+	<select id="findGroupList" resultMap="resultMap">
+		select * from t_group t where 1=1 
+		<if test="projectId != null and '' != projectId">  
+            <![CDATA[  
+              AND t.projectId = #{projectId}  
+            ]]>  
+        </if>
+        <if test="parentGroupId != null and '' != parentGroupId">  
+            <![CDATA[  
+              AND t.parentGroupId = #{parentGroupId}  
+            ]]>  
+        </if>
+	</select>
+	<select id="findGroupListByProjectId" parameterType="Integer" resultMap="resultMap">
+		select t.*,IFNULL(t2.name,"顶级组") parentGroupName from t_group t 
+		left join t_group t2 on t.parentGroupId=t2.id
+		where t.projectId=#{projectId}
+	</select>
+	<insert id="insertGroup" parameterType="Group">
+		insert into t_group(name,code,projectId,parentGroupId)
+		values(#{name},#{code},#{projectId},#{parentGroupId})
+	</insert>
+	<update id="updateGroup" parameterType="Group">
+		update t_group set name=#{name},code=#{code},parentGroupId=#{parentGroupId} where id=#{id}
+	</update>
+	<select id="findGroupById" parameterType="Integer" resultMap="resultMap">
+		select t.* from t_group t where t.id=#{id}
+	</select>
+	<delete id="deleteGroup" parameterType="Integer">
+		delete from t_group where id=#{id}
+	</delete>
+	<select id="findGroupByCode" parameterType="String" resultMap="resultMap">
+		select t.* from t_group t where t.code=#{code}
+	</select>
+</mapper>  
+

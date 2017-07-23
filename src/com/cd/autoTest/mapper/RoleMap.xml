@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC 
+"-//mybatis.org//DTD Mapper 3.0//EN" 
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.cd.autoTest.dao.RoleDAO">
+	<resultMap type="Role" id="resultMap">
+		<id property="id" column="id" />
+		<result property="name" column="name" />
+		<result property="comment" column="comment" />
+		<result property="isAdmin" column="isAdmin" />
+	</resultMap>
+	<select id="findRoleList" resultMap="resultMap">
+		select * from t_role
+		
+	</select>
+	<insert id="insertRole" parameterType="Role">
+		insert into t_role(name,comment,isAdmin)
+		values(#{name},#{comment},#{isAdmin})
+	</insert>
+	<update id="updateRole" parameterType="Role">
+		update t_role set name=#{name},comment=#{comment},isAdmin=#{isAdmin} where id=#{id}
+	</update>
+	<select id="findRoleById" parameterType="Integer" resultMap="resultMap">
+		select t.* from t_role t where t.id=#{id}
+	</select>
+	<delete id="deleteRole" parameterType="Integer">
+		delete from t_role where id=#{id}
+	</delete>
+</mapper>  
+

@@ -1,0 +1,67 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC 
+"-//mybatis.org//DTD Mapper 3.0//EN" 
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.cd.autoTest.dao.ActionDAO">
+	<resultMap type="ActionInfo" id="resultMap">
+		<id property="id" column="id" />
+		<result property="name" column="name" />
+		<result property="actionCategory" column="actionCategory" />
+		<result property="commandCategory" column="commandCategory" />
+		<result property="commandName" column="commandName" />
+		<result property="elementName" column="elementName" />
+		<result property="elementXpath" column="elementXpath" />
+		<result property="contextKey" column="contextKey" />
+		<result property="valueCategory" column="valueCategory" />
+		<result property="defaultValue" column="defaultValue" />
+		<result property="sort" column="sort" />
+		<result property="parentActionId" column="parentActionId" />
+		<result property="pageId" column="pageId" />
+	</resultMap>
+	<select id="findActionList" resultMap="resultMap">
+		select * from t_action t where 1=1 and t.parentActionId=0
+		<if test="pageId != null and '' != pageId">  
+            <![CDATA[  
+              AND t.pageId = #{pageId}  
+            ]]>  
+        </if>
+        order by sort
+	</select>
+	<select id="findChildActionListByParentActionId" resultMap="resultMap"  parameterType="Integer" >
+		select * from t_action t where t.parentActionId=#{parentActionId}
+        order by sort
+	</select>
+	<insert id="insertAction" parameterType="ActionInfo">
+		insert into t_action(name,elementName,actionCategory,elementXpath,commandCategory,commandName,contextKey,valueCategory,defaultValue,sort,parentActionId,pageId)
+		values(#{name},#{elementName},#{actionCategory},#{elementXpath},#{commandCategory},#{commandName},#{contextKey},#{valueCategory},#{defaultValue},#{sort},#{parentActionId},#{pageId})
+		<selectKey resultType="Integer" keyProperty="id" order="AFTER">  
+        	SELECT LAST_INSERT_ID() AS id  
+    	</selectKey> 
+	</insert>
+	<select id="findMaxSort"  parameterType="Integer" resultType="Integer">
+		select IFNULL(MAX(SORT),0) sort from t_action t where 1=1 and t.pageId=#{pageId}
+	</select>
+	<select id="findMaxSortByParentActionId"  parameterType="Integer" resultType="Integer">
+		select IFNULL(MAX(SORT),0) sort from t_action t where 1=1 and t.parentActionId=#{parentActionId}
+	</select>
+	<select id="findActionById" resultMap="resultMap">
+		select * from t_action t where t.id=#{id}
+	</select>
+	<update id="updateActionSort" parameterType="ActionInfo">
+		update t_action set sort=sort+1 where sort>#{sort} and pageId=#{pageId} and parentActionId=#{parentActionId}
+	</update>
+	<update id="updateActionSortMinus" parameterType="ActionInfo">
+		update t_action set sort=sort-1 where sort>#{sort} and pageId=#{pageId} and parentActionId=#{parentActionId}
+	</update>
+	<delete id="deleteAction" parameterType="Integer">
+		delete from t_action where id=#{id}
+	</delete>
+	<update id="updateAction" parameterType="ActionInfo">
+		update t_action set name=#{name} , elementName=#{elementName}, 
+		actionCategory=#{actionCategory}, elementXpath=#{elementXpath},
+		commandCategory=#{commandCategory},commandName=#{commandName},
+		contextKey=#{contextKey},valueCategory=#{valueCategory},
+		defaultValue=#{defaultValue} where id=#{id}
+	</update>
+</mapper>  
+

@@ -1,0 +1,170 @@
+{
+    "action": [
+        {
+            "actionCategory": 1,
+            "command": [
+                {
+                    "id": 1,
+                    "name": "html",
+                    "commandList": [
+                        {
+                            "id": 1,
+                            "commandName": "sendKeys",
+                            "commandText": "输入"
+                        },
+                        {
+                            "id": 2,
+                            "commandName": "gatherData",
+                            "commandText": "收集数据"
+                        },
+                        {
+                            "id": 3,
+                            "commandName": "fileUpload",
+                            "commandText": "上传文件"
+                        },
+                        {
+                            "id": 4,
+                            "commandName": "chooseGroupDate",
+                            "commandText": "选择团期"
+                        },
+                        {
+                            "id": 5,
+                            "commandName": "sendKeysByJS",
+                            "commandText": "JS手段输入"
+                        },
+                        {
+                            "id": 6,
+                            "commandName": "sendRichText",
+                            "commandText": "富文本输入"
+                        }
+                    ]
+                }
+            ]
+        },
+        {
+            "actionCategory": 2,
+            "command": [
+                {
+                    "id": 1,
+                    "name": "html",
+                    "commandList": [
+                        {
+                            "id": 1,
+                            "commandName": "click",
+                            "commandText": "单击"
+                        }
+                    ]
+                }
+            ]
+        },
+        {
+            "actionCategory": 3,
+            "command": [
+                {
+                    "id": 1,
+                    "name": "html",
+                    "commandList": [
+                        {
+                            "id": 1,
+                            "commandName": "select",
+                            "commandText": "选择"
+                        }
+                    ]
+                }
+            ]
+        },
+        {
+            "actionCategory": 4,
+            "command": [
+                {
+                    "id": 1,
+                    "name": "html",
+                    "commandList": [
+                        {
+                            "id": 1,
+                            "commandName": "click",
+                            "commandText": "单击"
+                        },
+                        {
+                            "id": 2,
+                            "commandName": "getTextOrValue",
+                            "commandText": "获取页面值并放入内存"
+                        },
+                        {
+                            "id": 3,
+                            "commandName": "wait",
+                            "commandText": "等待"
+                        },
+                        {
+                            "id": 4,
+                            "commandName": "screenShot",
+                            "commandText": "截图"
+                        },
+                        {
+                            "id": 5,
+                            "commandName": "onMouseOver",
+                            "commandText": "鼠标悬停"
+                        },
+                        {
+                            "id": 5,
+                            "commandName": "closeTab",
+                            "commandText": "关闭Tab"
+                        },
+                        {
+                            "id": 6,
+                            "commandName": "switchTitle",
+                            "commandText": "切换Title"
+                        },
+                        {
+                            "id": 7,
+                            "commandName": "switchTab",
+                            "commandText": "切换Tab"
+                        },
+                        {
+                            "id": 8,
+                            "commandName": "switchIframe",
+                            "commandText": "切换IFrame"
+                        },
+                        {
+                            "id": 9,
+                            "commandName": "waitDisplay",
+                            "commandText": "等待元素出现"
+                        },
+                        {
+                            "id": 10,
+                            "commandName": "scrollTop",
+                            "commandText": "置顶滚动条"
+                        }
+                    ]
+                },
+                {
+                    "id": 2,
+                    "name": "logical",
+                    "commandList": [
+                        {
+                            "id": 1,
+                            "commandName": "singleIf",
+                            "commandText": "如果"
+                        },
+                        {
+                            "id": 2,
+                            "commandName": "refPage",
+                            "commandText": "引用页面"
+                        }
+                    ]
+                },
+                {
+                    "id": 3,
+                    "name": "function",
+                    "commandList": [
+                        {
+                            "id": 1,
+                            "commandName": "setContext",
+                            "commandText": "设置内存"
+                        }
+                    ]
+                }
+            ]
+        }
+    ]
+}

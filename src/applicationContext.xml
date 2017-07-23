@@ -1,0 +1,349 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:context="http://www.springframework.org/schema/context" xmlns:aop="http://www.springframework.org/schema/aop" xmlns:tx="http://www.springframework.org/schema/tx"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans 
+         http://www.springframework.org/schema/beans/spring-beans-3.0.xsd
+         http://www.springframework.org/schema/context
+         http://www.springframework.org/schema/context/spring-context-3.0.xsd
+         http://www.springframework.org/schema/tx
+         http://www.springframework.org/schema/tx/spring-tx-3.0.xsd
+         http://www.springframework.org/schema/aop 
+         http://www.springframework.org/schema/aop/spring-aop-3.0.xsd">
+
+	<!-- 数据源属性配置文件 -->
+	<!-- <context:property-placeholder location="classpath:config.properties"/>-->
+	<!--<bean id="propertyConfigurer" class="org.springframework.beans.factory.config.PropertyPlaceholderConfigurer">
+		<property name="location" value="/WEB-INF/jdbc.properties" />
+	</bean>-->
+	<bean id="dataSource" class="org.springframework.jdbc.datasource.DriverManagerDataSource">
+		<property name="driverClassName" value="com.mysql.jdbc.Driver" />
+		<property name="url" value="jdbc:mysql://127.0.0.1:3306/test?useUnicode=true&amp;characterEncoding=utf8" />
+		<property name="username" value="root" />
+		<property name="password" value="123456" />
+	</bean>
+	<!-- 数据连接管理 -->
+	<bean id="transactionManager" class="org.springframework.jdbc.datasource.DataSourceTransactionManager">
+		<property name="dataSource" ref="dataSource" />
+	</bean>
+	<!-- myBatis文件 创建SqlSessionFactory，同时指定数据源 -->
+	<bean id="sqlSessionFactory" class="org.mybatis.spring.SqlSessionFactoryBean">
+		<property name="configLocation" value="classpath:myBatis-config.xml" />
+		<property name="dataSource" ref="dataSource" />
+	</bean>
+	<tx:advice id="allTxAdvice" transaction-manager="transactionManager">
+		<tx:attributes>
+			<tx:method name="delete*" propagation="REQUIRED" read-only="false" rollback-for="java.lang.RuntimeException" />
+			<tx:method name="insert*" propagation="REQUIRED" read-only="false" rollback-for="java.lang.RuntimeException" />
+			<tx:method name="update*" propagation="REQUIRED" read-only="false" rollback-for="java.lang.RuntimeException" />
+
+			<tx:method name="find*" propagation="SUPPORTS" />
+			<tx:method name="get*" propagation="SUPPORTS" />
+			<tx:method name="select*" propagation="SUPPORTS" />
+		</tx:attributes>
+	</tx:advice>
+
+	<aop:config>
+		<aop:pointcut id="pc" expression="execution(public * com.cd.autoTest.service.*.*(..))" />
+		<aop:advisor pointcut-ref="pc" advice-ref="allTxAdvice" />
+	</aop:config>
+
+	<!--创建数据映射器，数据映射器必须为接口 -->
+	<bean id="userMapDao" class="org.mybatis.spring.mapper.MapperFactoryBean">
+		<!-- 接口 -->
+		<property name="mapperInterface" value="com.cd.autoTest.dao.UserDAO" />
+		<property name="sqlSessionFactory" ref="sqlSessionFactory" />
+	</bean>
+	<bean id="pageMapDao" class="org.mybatis.spring.mapper.MapperFactoryBean">
+		<!-- 接口 -->
+		<property name="mapperInterface" value="com.cd.autoTest.dao.PageDAO" />
+		<property name="sqlSessionFactory" ref="sqlSessionFactory" />
+	</bean>
+	<bean id="groupMapDao" class="org.mybatis.spring.mapper.MapperFactoryBean">
+		<!-- 接口 -->
+		<property name="mapperInterface" value="com.cd.autoTest.dao.GroupDAO" />
+		<property name="sqlSessionFactory" ref="sqlSessionFactory" />
+	</bean>
+	<bean id="actionMapDao" class="org.mybatis.spring.mapper.MapperFactoryBean">
+		<!-- 接口 -->
+		<property name="mapperInterface" value="com.cd.autoTest.dao.ActionDAO" />
+		<property name="sqlSessionFactory" ref="sqlSessionFactory" />
+	</bean>
+
+
+	<bean id="dataMapMapDao" class="org.mybatis.spring.mapper.MapperFactoryBean">
+		<!-- 接口 -->
+		<property name="mapperInterface" value="com.cd.autoTest.dao.DataMapDAO" />
+		<property name="sqlSessionFactory" ref="sqlSessionFactory" />
+	</bean>
+	<bean id="dataMapCollectionMapDao" class="org.mybatis.spring.mapper.MapperFactoryBean">
+		<!-- 接口 -->
+		<property name="mapperInterface" value="com.cd.autoTest.dao.DataMapCollectionDAO" />
+		<property name="sqlSessionFactory" ref="sqlSessionFactory" />
+	</bean>
+	<bean id="caseMapDao" class="org.mybatis.spring.mapper.MapperFactoryBean">
+		<!-- 接口 -->
+		<property name="mapperInterface" value="com.cd.autoTest.dao.CaseDAO" />
+		<property name="sqlSessionFactory" ref="sqlSessionFactory" />
+	</bean>
+	<bean id="baseCaseMapDao" class="org.mybatis.spring.mapper.MapperFactoryBean">
+		<!-- 接口 -->
+		<property name="mapperInterface" value="com.cd.autoTest.dao.BaseCaseDAO" />
+		<property name="sqlSessionFactory" ref="sqlSessionFactory" />
+	</bean>
+	<bean id="casePageMapDao" class="org.mybatis.spring.mapper.MapperFactoryBean">
+		<!-- 接口 -->
+		<property name="mapperInterface" value="com.cd.autoTest.dao.CasePageDAO" />
+		<property name="sqlSessionFactory" ref="sqlSessionFactory" />
+	</bean>
+	<bean id="caseDataMapDao" class="org.mybatis.spring.mapper.MapperFactoryBean">
+		<!-- 接口 -->
+		<property name="mapperInterface" value="com.cd.autoTest.dao.CaseDataDAO" />
+		<property name="sqlSessionFactory" ref="sqlSessionFactory" />
+	</bean>
+	<bean id="categoryMapDao" class="org.mybatis.spring.mapper.MapperFactoryBean">
+		<!-- 接口 -->
+		<property name="mapperInterface" value="com.cd.autoTest.dao.CategoryDAO" />
+		<property name="sqlSessionFactory" ref="sqlSessionFactory" />
+	</bean>
+	<bean id="runCaseResultMapDao" class="org.mybatis.spring.mapper.MapperFactoryBean">
+		<!-- 接口 -->
+		<property name="mapperInterface" value="com.cd.autoTest.dao.RunCaseResultDAO" />
+		<property name="sqlSessionFactory" ref="sqlSessionFactory" />
+	</bean>
+	<bean id="environmentMapDao" class="org.mybatis.spring.mapper.MapperFactoryBean">
+		<!-- 接口 -->
+		<property name="mapperInterface" value="com.cd.autoTest.dao.EnvironmentDAO" />
+		<property name="sqlSessionFactory" ref="sqlSessionFactory" />
+	</bean>
+	<bean id="userGroupMapDao" class="org.mybatis.spring.mapper.MapperFactoryBean">
+		<!-- 接口 -->
+		<property name="mapperInterface" value="com.cd.autoTest.dao.UserGroupDAO" />
+		<property name="sqlSessionFactory" ref="sqlSessionFactory" />
+	</bean>
+	<bean id="strategyMapDao" class="org.mybatis.spring.mapper.MapperFactoryBean">
+		<!-- 接口 -->
+		<property name="mapperInterface" value="com.cd.autoTest.dao.StrategyDAO" />
+		<property name="sqlSessionFactory" ref="sqlSessionFactory" />
+	</bean>
+	<bean id="contextMapDao" class="org.mybatis.spring.mapper.MapperFactoryBean">
+		<!-- 接口 -->
+		<property name="mapperInterface" value="com.cd.autoTest.dao.ContextDAO" />
+		<property name="sqlSessionFactory" ref="sqlSessionFactory" />
+	</bean>
+	<bean id="roleMapDao" class="org.mybatis.spring.mapper.MapperFactoryBean">
+		<!-- 接口 -->
+		<property name="mapperInterface" value="com.cd.autoTest.dao.RoleDAO" />
+		<property name="sqlSessionFactory" ref="sqlSessionFactory" />
+	</bean>
+	<!--service -->
+	<bean id="userService" class="com.cd.autoTest.service.UserService">
+		<property name="userDao" ref="userMapDao" />
+	</bean>
+	<bean id="pageService" class="com.cd.autoTest.service.PageService">
+		<property name="pageDao" ref="pageMapDao" />
+		<property name="groupDao" ref="groupMapDao" />
+		<property name="projectDao" ref="projectMapDao" />
+		<property name="actionDao" ref="actionMapDao" />
+		<property name="dataMapDao" ref="dataMapMapDao" />
+		<property name="dataMapCollectionDao" ref="dataMapCollectionMapDao" />
+		<property name="caseDataDao" ref="caseDataMapDao" />
+		<property name="contextDao" ref="contextMapDao" />
+	</bean>
+	<bean id="groupService" class="com.cd.autoTest.service.GroupService">
+		<property name="groupDao" ref="groupMapDao" />
+	</bean>
+	<bean id="actionService" class="com.cd.autoTest.service.ActionService">
+		<property name="actionDao" ref="actionMapDao" />
+		<property name="dataMapDao" ref="dataMapMapDao" />
+		<property name="dataMapCollectionDao" ref="dataMapCollectionMapDao" />
+		<property name="casePageDao" ref="casePageMapDao" />
+		<property name="caseDataDao" ref="caseDataMapDao" />
+		<property name="elementDao" ref="elementMapDao" />
+	</bean>
+	<bean id="dataMapService" class="com.cd.autoTest.service.DataMapService">
+		<property name="dataMapDao" ref="dataMapMapDao" />
+		<property name="caseDataDao" ref="caseDataMapDao" />
+	</bean>
+	<bean id="dataMapCollectionService" class="com.cd.autoTest.service.DataMapCollectionService">
+		<property name="dataMapCollectionDao" ref="dataMapCollectionMapDao" />
+	</bean>
+	<bean id="caseService" class="com.cd.autoTest.service.CaseService">
+		<property name="caseDao" ref="caseMapDao" />
+		<property name="baseCaseDao" ref="baseCaseMapDao" />
+		<property name="casePageDao" ref="casePageMapDao" />
+		<property name="caseDataDao" ref="caseDataMapDao" />
+	</bean>
+	<bean id="baseCaseService" class="com.cd.autoTest.service.BaseCaseService">
+		<property name="baseCaseDao" ref="baseCaseMapDao" />
+		<property name="casePageDao" ref="casePageMapDao" />
+		<property name="caseDataDao" ref="caseDataMapDao" />
+	</bean>
+	<bean id="casePageService" class="com.cd.autoTest.service.CasePageService">
+		<property name="casePageDao" ref="casePageMapDao" />
+		<property name="dataMapDao" ref="dataMapMapDao" />
+		<property name="caseDataDao" ref="caseDataMapDao" />
+	</bean>
+	<bean id="caseDataService" class="com.cd.autoTest.service.CaseDataService">
+		<property name="caseDataDao" ref="caseDataMapDao" />
+	</bean>
+	<bean id="categoryService" class="com.cd.autoTest.service.CategoryService">
+		<property name="categoryDao" ref="categoryMapDao" />
+	</bean>
+	<bean id="runCaseResultService" class="com.cd.autoTest.service.RunCaseResultService">
+		<property name="runCaseResultDao" ref="runCaseResultMapDao" />
+	</bean>
+	<bean id="environmentService" class="com.cd.autoTest.service.EnvironmentService">
+		<property name="environmentDao" ref="environmentMapDao" />
+	</bean>
+	<bean id="userGroupService" class="com.cd.autoTest.service.UserGroupService">
+		<property name="userGroupDao" ref="userGroupMapDao" />
+	</bean>
+	<bean id="strategyService" class="com.cd.autoTest.service.StrategyService">
+		<property name="strategyDao" ref="strategyMapDao" />
+	</bean>
+	<bean id="contextService" class="com.cd.autoTest.service.ContextService">
+		<property name="contextDao" ref="contextMapDao" />
+	</bean>
+	<bean id="roleService" class="com.cd.autoTest.service.RoleService">
+		<property name="roleDao" ref="roleMapDao" />
+	</bean>
+	<bean id="userAction" class="com.cd.autoTest.action.UserAction">
+		<property name="userService" ref="userService" />
+		<property name="userGroupService" ref="userGroupService" />
+		<property name="roleService" ref="roleService" />
+		<property name="menuService" ref="menuService" />
+	</bean>
+	<bean id="pageAction" class="com.cd.autoTest.action.PageAction">
+		<property name="pageService" ref="pageService" />
+		<property name="groupService" ref="groupService" />
+		<property name="projectService" ref="projectService" />
+		<property name="actionService" ref="actionService" />
+		<property name="dataMapService" ref="dataMapService" />
+		<property name="dataMapCollectionService" ref="dataMapCollectionService" />
+		<property name="contextService" ref="contextService" />
+	</bean>
+	<bean id="actionAction" class="com.cd.autoTest.action.ActionAction">
+		<property name="actionService" ref="actionService" />
+		<property name="dataMapService" ref="dataMapService" />
+		<property name="dataMapCollectionService" ref="dataMapCollectionService" />
+		<property name="casePageService" ref="casePageService" />
+		<property name="caseDataService" ref="caseDataService" />
+		<property name="pageService" ref="pageService" />
+	</bean>
+
+	<bean id="dataMapAction" class="com.cd.autoTest.action.DataMapAction">
+		<property name="dataMapService" ref="dataMapService" />
+	</bean>
+	<bean id="caseAction" class="com.cd.autoTest.action.CaseAction">
+		<property name="caseService" ref="caseService" />
+		<property name="groupService" ref="groupService" />
+		<property name="projectService" ref="projectService" />
+		<property name="categoryService" ref="categoryService" />
+		<property name="baseCaseService" ref="baseCaseService" />
+		<property name="casePageService" ref="casePageService" />
+		<property name="caseDataService" ref="caseDataService" />
+		<property name="runCaseResultService" ref="runCaseResultService" />
+		<property name="environmentService" ref="environmentService" />
+		<property name="clientService" ref="clientService" />
+	</bean>
+	<bean id="baseCaseAction" class="com.cd.autoTest.action.BaseCaseAction">
+		<property name="baseCaseService" ref="baseCaseService" />
+		<property name="groupService" ref="groupService" />
+		<property name="projectService" ref="projectService" />
+		<property name="casePageService" ref="casePageService" />
+		<property name="caseDataService" ref="caseDataService" />
+		<property name="dataMapService" ref="dataMapService" />
+		<property name="dataMapCollectionService" ref="dataMapCollectionService" />
+		<property name="caseService" ref="caseService" />
+		<property name="actionService" ref="actionService" />
+	</bean>
+	<bean id="manageAction" class="com.cd.autoTest.action.ManageAction">
+		<property name="groupService" ref="groupService" />
+		<property name="categoryService" ref="categoryService" />
+		<property name="environmentService" ref="environmentService" />
+	</bean>
+	<bean id="strategyAction" class="com.cd.autoTest.action.StrategyAction">
+		<property name="strategyService" ref="strategyService" />
+	</bean>
+	<bean id="roleAction" class="com.cd.autoTest.action.RoleAction">
+		<property name="roleService" ref="roleService" />
+	</bean>
+	<bean id="menuMapDao" class="org.mybatis.spring.mapper.MapperFactoryBean">
+		<!-- 接口 -->
+		<property name="mapperInterface" value="com.cd.autoTest.dao.MenuDAO" />
+		<property name="sqlSessionFactory" ref="sqlSessionFactory" />
+	</bean>
+	<bean id="menuService" class="com.cd.autoTest.service.MenuService">
+		<property name="menuDao" ref="menuMapDao" />
+	</bean>
+	<bean id="menuAction" class="com.cd.autoTest.action.MenuAction">
+		<property name="menuService" ref="menuService" />
+	</bean>
+	<bean id="roleMenuMapDao" class="org.mybatis.spring.mapper.MapperFactoryBean">
+		<!-- 接口 -->
+		<property name="mapperInterface" value="com.cd.autoTest.dao.RoleMenuDAO" />
+		<property name="sqlSessionFactory" ref="sqlSessionFactory" />
+	</bean>
+	<bean id="roleMenuService" class="com.cd.autoTest.service.RoleMenuService">
+		<property name="roleMenuDao" ref="roleMenuMapDao" />
+	</bean>
+	<bean id="roleMenuAction" class="com.cd.autoTest.action.RoleMenuAction">
+		<property name="roleMenuService" ref="roleMenuService" />
+		<property name="menuService" ref="menuService" />
+	</bean>
+	<bean id="clientMapDao" class="org.mybatis.spring.mapper.MapperFactoryBean">
+		<!-- 接口 -->
+		<property name="mapperInterface" value="com.cd.autoTest.dao.ClientDAO" />
+		<property name="sqlSessionFactory" ref="sqlSessionFactory" />
+	</bean>
+	<bean id="clientService" class="com.cd.autoTest.service.ClientService">
+		<property name="clientDao" ref="clientMapDao" />
+	</bean>
+	<bean id="clientAction" class="com.cd.autoTest.action.ClientAction">
+		<property name="clientService" ref="clientService" />
+		<property name="userService" ref="userService" />
+	</bean>
+	<bean id="elementMapDao" class="org.mybatis.spring.mapper.MapperFactoryBean">
+		<!-- 接口 -->
+		<property name="mapperInterface" value="com.cd.autoTest.dao.ElementDAO" />
+		<property name="sqlSessionFactory" ref="sqlSessionFactory" />
+	</bean>
+	<bean id="elementService" class="com.cd.autoTest.service.ElementService">
+		<property name="elementDao" ref="elementMapDao" />
+	</bean>
+	<bean id="elementAction" class="com.cd.autoTest.action.ElementAction">
+		<property name="elementService" ref="elementService" />
+	</bean>
+	<bean id="degradeMapDao" class="org.mybatis.spring.mapper.MapperFactoryBean">
+		<!-- 接口 -->
+		<property name="mapperInterface" value="com.cd.autoTest.dao.DegradeDAO" />
+		<property name="sqlSessionFactory" ref="sqlSessionFactory" />
+	</bean>
+	<bean id="degradeService" class="com.cd.autoTest.service.DegradeService">
+		<property name="degradeDao" ref="degradeMapDao" />
+	</bean>
+	<bean id="degradeAction" class="com.cd.autoTest.action.DegradeAction">
+		<property name="degradeService" ref="degradeService" />
+		<property name="degradeDataService" ref="degradeDataService" />
+		<property name="environmentService" ref="environmentService" />
+	</bean>
+	<bean id="degradeDataMapDao" class="org.mybatis.spring.mapper.MapperFactoryBean">
+		<!-- 接口 -->
+		<property name="mapperInterface" value="com.cd.autoTest.dao.DegradeDataDAO" />
+		<property name="sqlSessionFactory" ref="sqlSessionFactory" />
+	</bean>
+	<bean id="degradeDataService" class="com.cd.autoTest.service.DegradeDataService">
+		<property name="degradeDataDao" ref="degradeDataMapDao" />
+	</bean>
+	<bean id="projectMapDao" class="org.mybatis.spring.mapper.MapperFactoryBean">
+		<!-- 接口 -->
+		<property name="mapperInterface" value="com.cd.autoTest.dao.ProjectDAO" />
+		<property name="sqlSessionFactory" ref="sqlSessionFactory" />
+	</bean>
+	<bean id="projectService" class="com.cd.autoTest.service.ProjectService">
+		<property name="projectDao" ref="projectMapDao" />
+	</bean>
+	<bean id="projectAction" class="com.cd.autoTest.action.ProjectAction">
+		<property name="projectService" ref="projectService" />
+	</bean>
+</beans>
+

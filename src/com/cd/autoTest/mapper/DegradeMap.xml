@@ -1,0 +1,97 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC 
+"-//mybatis.org//DTD Mapper 3.0//EN" 
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.cd.autoTest.dao.DegradeDAO">
+	<resultMap type="Degrade" id="resultMap">
+		<result property="caseId" column="caseId" />
+		<result property="caseName" column="caseName" />
+		<result property="leftRunCaseResultId" column="leftRunCaseResultId" />
+		<result property="rightRunCaseResultId" column="rightRunCaseResultId" />
+		<result property="leftEnvironmentId" column="leftEnvironmentId" />
+		<result property="leftEnvrionmentName" column="leftEnvrionmentName" />
+		<result property="rightEnvironmentId" column="rightEnvironmentId" />
+		<result property="rightEnvironmentName" column="rightEnvironmentName" />
+		<result property="leftExecuteDate" column="leftExecuteDate" />
+		<result property="rightExecuteDate" column="rightExecuteDate" />
+		
+		<result property="runCaseResultId" column="runCaseResultId" />
+		<result property="environmentId" column="environmentId" />
+		<result property="environmentName" column="environmentName" />
+		<result property="executeDate" column="executeDate" />
+		<result property="pageStart" column="pageStart" />
+		<result property="pageSize" column="pageSize" />
+	</resultMap>
+	<select id="findDegradeList" resultMap="resultMap"  parameterType="Degrade">
+		select tr1.id leftRunCaseResultId,tr2.id rightRunCaseResultId,tr1.caseId,tc.name caseName, 
+		tr1.environmentId leftEnvironmentId,tr1.updateTime leftExecuteDate,te1.name leftEnvrionmentName,
+		tr2.environmentId rightEnvironmentId,tr2.updateTime rightExecuteDate,te2.name rightEnvironmentName
+		from (SELECT * from  t_runcaseresult tr where 1=1 
+		<if test="leftExecuteDate != null and leftExecuteDate !=''">
+			and tr.updateTime LIKE concat(date_format(#{leftExecuteDate},'%Y-%m-%d'),'%')
+		</if>
+		order by tr.updateTime desc) tr1
+		left join (SELECT * from t_runcaseresult tr where 1=1 
+		<if test="rightExecuteDate != null and rightExecuteDate !=''">
+			and tr.updateTime LIKE concat(date_format(#{rightExecuteDate},'%Y-%m-%d'),'%')
+		</if>
+		order by tr.updateTime desc) tr2 on tr1.caseId=tr2.caseId
+		left join t_case tc on tr1.caseId=tc.id
+		left join t_environment te1 on tr1.environmentId=te1.id
+		left join t_environment te2 on tr2.environmentId=te2.id
+		where 1=1 and (tr1.status=4 or tr1.status=5) and (tr2.status=4 or tr2.status=5) and tr1.id &lt;&gt; tr2.id
+		<if test="leftEnvironmentId != null and leftEnvironmentId !=''">
+			and tr1.environmentId=#{leftEnvironmentId}
+		</if>
+		<if test="rightEnvironmentId != null and rightEnvironmentId !=''">
+			and tr2.environmentId=#{rightEnvironmentId}
+		</if>
+		
+		 <if test="caseName != null and caseName !=''">
+		 	and tc.name like concat('%',#{caseName},'%')
+		</if>
+		group by caseId
+        <if test="pageStart != null and pageSize !=null">
+			limit #{pageStart},#{pageSize}
+		</if>
+	</select>
+	<select id="findDegradeCount" resultType="Integer"  parameterType="Degrade">
+		select count(1) count from(select tr1.id leftRunCaseResultId,tr2.id rightRunCaseResultId,tr1.caseId,tc.name caseName, 
+		tr1.environmentId leftEnvironmentId,tr1.updateTime leftExecuteDate,te1.name leftEnvrionmentName,
+		tr2.environmentId rightEnvironmentId,tr2.updateTime rightExecuteDate,te2.name rightEnvironmentName
+		from (SELECT * from  t_runcaseresult tr where 1=1 
+		<if test="leftExecuteDate != null and leftExecuteDate !=''">
+			and tr.updateTime LIKE concat(date_format(#{leftExecuteDate},'%Y-%m-%d'),'%')
+		</if>
+		order by tr.updateTime desc) tr1
+		left join (SELECT * from t_runcaseresult tr where 1=1 
+		<if test="rightExecuteDate != null and rightExecuteDate !=''">
+			and tr.updateTime LIKE concat(date_format(#{rightExecuteDate},'%Y-%m-%d'),'%')
+		</if>
+		order by tr.updateTime desc) tr2 on tr1.caseId=tr2.caseId
+		left join t_case tc on tr1.caseId=tc.id
+		left join t_environment te1 on tr1.environmentId=te1.id
+		left join t_environment te2 on tr2.environmentId=te2.id
+		where 1=1 and (tr1.status=4 or tr1.status=5) and (tr2.status=4 or tr2.status=5) and tr1.id &lt;&gt; tr2.id
+		<if test="leftEnvironmentId != null and leftEnvironmentId !=''">
+			and tr1.environmentId=#{leftEnvironmentId}
+		</if>
+		<if test="rightEnvironmentId != null and rightEnvironmentId !=''">
+			and tr2.environmentId=#{rightEnvironmentId}
+		</if>
+		
+		 <if test="caseName != null and caseName !=''">
+		 	and tc.name like concat('%',#{caseName},'%')
+		</if>
+		group by caseId
+		)tt
+	</select>
+	<select id="findDegradeById" resultMap="resultMap"  parameterType="Integer">
+		select tr.id runCaseResultId,tc.name caseName,te.name environmentName,tr.insertTime executeDate from t_runcaseresult tr 
+		LEFT JOIN t_case tc on tr.caseId=tc.id
+		LEFT JOIN t_environment te on tr.environmentId=te.id
+		where tr.id=#{id}
+	</select>
+	
+</mapper>  
+

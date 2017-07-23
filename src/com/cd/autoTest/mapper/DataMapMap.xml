@@ -1,0 +1,79 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC 
+"-//mybatis.org//DTD Mapper 3.0//EN" 
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.cd.autoTest.dao.DataMapDAO">
+	<resultMap type="DataMap" id="resultMap">
+		<id property="id" column="id" />
+		<result property="code" column="code" />
+		<result property="category" column="category" />
+		<result property="actionId" column="actionId" />
+		<result property="pageId" column="pageId" />
+		<result property="sort" column="sort" />
+		<result property="refPageId" column="refPageId" />
+		<result property="elementName" column="elementName" />
+		<result property="pageTitle" column="pageTitle" />
+	</resultMap>
+	<select id="findDataMapListByPageId" parameterType="Integer" resultMap="resultMap">
+		select t.*,ta.elementName elementName,tp.title pageTitle from t_datamap t 
+		left join t_action ta on t.actionId=ta.id
+		left join t_page tp on t.pageId=tp.id
+		where t.pageId=#{pageId}  order by t.sort
+	</select>
+	<select id="findDataMapByActionId" parameterType="Integer" resultMap="resultMap">
+		select * from t_datamap t where t.actionId=#{actionId} 
+	</select>
+	<insert id="insertDataMap" parameterType="DataMap">
+		insert into t_datamap(category,actionId,pageId,sort,refPageId)
+		values(#{category},#{actionId},#{pageId},#{sort},#{refPageId})
+		<selectKey resultType="Integer" keyProperty="id" order="AFTER">  
+        	SELECT LAST_INSERT_ID() AS id  
+    	</selectKey> 
+	</insert>
+	<select id="findActionIdByDataMapId" parameterType="Integer" resultType="Integer">
+		select IFNULL(actionId,0) actionId from t_datamap t where t.id=#{id}
+	</select>
+	<select id="findMaxSort" parameterType="Integer" resultType="Integer">
+		select IFNULL(max(sort),0) sort from t_datamap t where t.pageId=#{pageId}
+	</select>
+	<delete id="deleteDataMapByActionId" parameterType="Integer">
+		delete from t_datamap where actionId=#{actionId}
+	</delete>
+	<select id="findDataMapById" parameterType="Integer" resultMap="resultMap">
+		select * from t_datamap t where t.id=#{id} 
+	</select>
+	<select id="findDataMap"  parameterType="DataMap"  resultMap="resultMap">
+		select * from t_datamap t where 1=1
+		<if test="id != null and '' != id">  
+            <![CDATA[  
+              AND t.id = #{id}  
+            ]]>  
+        </if>   
+		<if test="pageId != null and '' != pageId">  
+            <![CDATA[  
+              AND t.pageId = #{pageId}  
+            ]]>  
+        </if>
+        <if test="sort != null and '' != sort">  
+            <![CDATA[  
+              AND t.sort = #{sort}  
+            ]]>  
+        </if>
+              
+	</select>
+	<update id="updateDataMap" parameterType="DataMap">
+		update t_datamap set 
+		<if test="sort != null and '' != sort">  
+            <![CDATA[  
+              sort = #{sort}  
+            ]]>  
+        </if>
+        <if test="code != null and '' != code">  
+            <![CDATA[  
+              code = #{code}  
+            ]]>  
+        </if>
+		where id=#{id}
+	</update>
+</mapper>  
+

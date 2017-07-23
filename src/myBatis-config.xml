@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE configuration PUBLIC "-//mybatis.org//DTD Config 3.0//EN" 
+	"http://mybatis.org/dtd/mybatis-3-config.dtd">
+<configuration>
+	<typeAliases>
+		<typeAlias alias="User" type="com.cd.autoTest.model.User"/>
+		<typeAlias alias="Page" type="com.cd.autoTest.model.Page"/>
+		<typeAlias alias="Group" type="com.cd.autoTest.model.Group"/>
+		<typeAlias alias="ActionInfo" type="com.cd.autoTest.model.ActionInfo"/>
+		<typeAlias alias="DataMap" type="com.cd.autoTest.model.DataMap"/>
+		<typeAlias alias="DataMapCollection" type="com.cd.autoTest.model.DataMapCollection"/>
+		<typeAlias alias="Case" type="com.cd.autoTest.model.Case"/>
+		<typeAlias alias="BaseCase" type="com.cd.autoTest.model.BaseCase"/>
+		<typeAlias alias="CasePage" type="com.cd.autoTest.model.CasePage"/>
+		<typeAlias alias="CaseData" type="com.cd.autoTest.model.CaseData"/>
+		<typeAlias alias="Category" type="com.cd.autoTest.model.Category"/>
+		<typeAlias alias="RunCaseResult" type="com.cd.autoTest.model.RunCaseResult"/>
+		<typeAlias alias="Environment" type="com.cd.autoTest.model.Environment"/>
+		<typeAlias alias="UserGroup" type="com.cd.autoTest.model.UserGroup"/>
+		<typeAlias alias="Strategy" type="com.cd.autoTest.model.Strategy"/>
+		<typeAlias alias="Context" type="com.cd.autoTest.model.Context"/>
+		<typeAlias alias="Role" type="com.cd.autoTest.model.Role"/>
+		<typeAlias alias="Menu" type="com.cd.autoTest.model.Menu"/>
+		<typeAlias alias="RoleMenu" type="com.cd.autoTest.model.RoleMenu"/>
+		<typeAlias alias="Client" type="com.cd.autoTest.model.Client"/>
+		<typeAlias alias="Element" type="com.cd.autoTest.model.Element"/>
+		<typeAlias alias="Degrade" type="com.cd.autoTest.model.Degrade"/>
+		<typeAlias alias="DegradeData" type="com.cd.autoTest.model.DegradeData"/>
+		<typeAlias alias="Project" type="com.cd.autoTest.model.Project"/>
+	</typeAliases>
+	<mappers>
+		<mapper resource="com/cd/autoTest/mapper/UserMap.xml" />
+		<mapper resource="com/cd/autoTest/mapper/DegradeMap.xml" />
+		<mapper resource="com/cd/autoTest/mapper/DegradeDataMap.xml" />
+		<mapper resource="com/cd/autoTest/mapper/PageMap.xml" />
+		<mapper resource="com/cd/autoTest/mapper/GroupMap.xml" />
+		<mapper resource="com/cd/autoTest/mapper/ActionMap.xml" />
+		<mapper resource="com/cd/autoTest/mapper/DataMapMap.xml" />
+		<mapper resource="com/cd/autoTest/mapper/DataMapCollectionMap.xml" />
+		<mapper resource="com/cd/autoTest/mapper/CaseMap.xml" />
+		<mapper resource="com/cd/autoTest/mapper/BaseCaseMap.xml" />
+		<mapper resource="com/cd/autoTest/mapper/CasePageMap.xml" />
+		<mapper resource="com/cd/autoTest/mapper/CaseDataMap.xml" />
+		<mapper resource="com/cd/autoTest/mapper/CategoryMap.xml" />
+		<mapper resource="com/cd/autoTest/mapper/RunCaseResultMap.xml" />
+		<mapper resource="com/cd/autoTest/mapper/EnvironmentMap.xml" />
+		<mapper resource="com/cd/autoTest/mapper/UserGroupMap.xml" />
+		<mapper resource="com/cd/autoTest/mapper/StrategyMap.xml" />
+		<mapper resource="com/cd/autoTest/mapper/ContextMap.xml" />
+		<mapper resource="com/cd/autoTest/mapper/RoleMap.xml" />
+		<mapper resource="com/cd/autoTest/mapper/MenuMap.xml" />
+		<mapper resource="com/cd/autoTest/mapper/RoleMenuMap.xml" />
+		<mapper resource="com/cd/autoTest/mapper/ClientMap.xml" />
+		<mapper resource="com/cd/autoTest/mapper/ElementMap.xml" />
+		<mapper resource="com/cd/autoTest/mapper/ProjectMap.xml" />
+	</mappers>
+</configuration>

@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC 
+"-//mybatis.org//DTD Mapper 3.0//EN" 
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.cd.autoTest.dao.ContextDAO">
+	<resultMap type="Context" id="resultMap">
+		<id property="id" column="id" />
+		<result property="name" column="name" />
+		<result property="contextKey" column="contextKey" />
+	</resultMap>
+	<select id="findContextList" parameterType="Context" resultMap="resultMap">
+		select t.* from t_context t  
+		
+	</select>
+	<insert id="insertContext" parameterType="Context">
+		insert into t_context(name,contextKey)
+		values(#{name},#{contextKey})
+	</insert>
+	<delete id="deleteContext" parameterType="Integer">
+		delete from t_context where id=#{id}
+	</delete>
+	<select id="findContextById" parameterType="Integer" resultMap="resultMap">
+		select * from t_context t where t.id=#{id} 
+	</select>
+	<update id="updateContext" parameterType="Context">
+		update t_context set name=#{name},contextKey=#{contextKey}
+		where id=#{id}
+	</update>
+</mapper>  
+

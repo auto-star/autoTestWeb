@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC 
+"-//mybatis.org//DTD Mapper 3.0//EN" 
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.cd.autoTest.dao.DataMapCollectionDAO">
+	<resultMap type="DataMapCollection" id="resultMap">
+		<id property="id" column="id" />
+		<result property="value" column="value" />
+		<result property="name" column="name" />
+		<result property="dataMapId" column="dataMapId" />
+		
+		<result property="sort" column="sort" />
+	</resultMap>
+	<insert id="insertDataMapCollection" parameterType="DataMapCollection">
+		insert into t_datamapcollection(value,name,dataMapId,sort)
+		values(#{value},#{name},#{dataMapId},#{sort})
+	</insert>
+	<select id="findDataMapCollectionListByDataMapId"  parameterType="Integer" resultMap="resultMap">
+		select * from t_datamapcollection t where t.dataMapId=#{dataMapId}
+	</select>
+	<delete id="deleteDataMapCollectionByDataMapId" parameterType="Integer">
+		delete from t_datamapcollection where dataMapId=#{dataMapId}
+	</delete>
+</mapper>  
+

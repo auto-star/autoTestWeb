@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC 
+"-//mybatis.org//DTD Mapper 3.0//EN" 
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.cd.autoTest.dao.CaseDataDAO">
+	<resultMap type="CaseData" id="resultMap">
+		<id property="id" column="id" />
+		<result property="category" column="category" />
+		<result property="dataValue" column="dataValue" />
+		<result property="dataMapId" column="dataMapId" />
+		<result property="casePageId" column="casePageId" />
+		<result property="sort" column="sort" />
+	</resultMap>
+	<select id="findCaseDataListByCasePageId" parameterType="Integer"  resultMap="resultMap">
+		select * from t_casedata t where t.casePageId=#{casePageId} order by t.sort
+	</select>
+	 <select id="findCaseData"  parameterType="CaseData" resultMap="resultMap">
+        select * from t_casedata t where t.casepageid=#{casePageId} and t.datamapid=#{dataMapId}
+    </select>
+	<insert id="insertCaseData" parameterType="CaseData">
+		insert into t_casedata(category,dataValue,dataMapId,casePageId,sort)
+		values(#{category},#{dataValue},#{dataMapId},#{casePageId},#{sort})
+	</insert>
+	<select id="findMaxSort" parameterType="Integer" resultType="Integer">
+		select IFNULL(max(sort),0) sort from t_casedata t where t.casepageid=#{casePageId}
+	</select>
+	<delete id="deleteCaseDataByCasePageId" parameterType="Integer">
+		delete from t_casedata where casePageId=#{casePageId}
+	</delete>
+	<update id="updateCaseData" parameterType="CaseData">
+		update t_casedata set dataValue=#{dataValue}  where id=#{id}
+	</update>
+	<delete id="deleteCaseDataByDataMapId" parameterType="Integer">
+		delete from t_casedata where dataMapId=#{dataMapId}
+	</delete>
+	<update id="updateCaseDataSortMinus" parameterType="Integer">
+		update t_casedata set sort=sort-1
+		where dataMapId=#{dataMapId}
+	</update>
+	<update id="updateCaseDataSortAdd" parameterType="Integer">
+		update t_casedata set sort=sort+1
+		where dataMapId=#{dataMapId}
+	</update>
+</mapper>  
+

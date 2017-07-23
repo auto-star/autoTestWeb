@@ -1,0 +1,134 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC 
+"-//mybatis.org//DTD Mapper 3.0//EN" 
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.cd.autoTest.dao.PageDAO">
+	<resultMap type="Page" id="resultMapPage">
+		<id property="id" column="id" />
+		<result property="title" column="title" />
+		<result property="comment" column="comment" />
+		<result property="code" column="code" />
+		<result property="groupId" column="groupId" />
+		<result property="groupName" column="groupName" />
+		<result property="parentGroupId" column="parentGroupId" />
+		<result property="parentGroupName" column="parentGroupName" />
+		<result property="projectId" column="projectId" />
+		<result property="projectName" column="projectName" />
+		<result property="isVisible" column="isVisible" />
+		<result property="insertTime" column="insertTime" />
+		<result property="updateTime" column="updateTime" />
+		<result property="insertUser" column="insertUser" />
+		<result property="updateUser" column="updateUser" />
+		<result property="pageStart" column="pageStart" />
+		<result property="pageSize" column="pageSize" />
+	</resultMap>
+	<select id="findPageList"  resultMap="resultMapPage" parameterType="Page">
+		select t.id,t.title,t.comment,t.code,groupId,t.projectId,t.isVisible,tg.name groupName,c.name projectName, tg2.name parentGroupName 
+		from t_page t 
+		left join t_group tg on t.groupId=tg.id
+		left join t_group tg2 on tg.parentGroupId=tg2.id
+		left join t_project c on t.projectId=c.id
+		where 1=1 
+		<if test="title != null and '' != title">  
+            <![CDATA[  
+              AND t.title  like concat('%',#{title},'%')
+            ]]>  
+        </if>
+		<if test="projectId != null and '' != projectId">  
+            <![CDATA[  
+              AND t.projectId = #{projectId}  
+            ]]>  
+        </if>
+        <if test="groupId != null and '' != groupId">  
+            <![CDATA[  
+              AND t.groupId = #{groupId}
+            ]]>  
+        </if> 
+        <if test="isVisible != null and '' != isVisible">  
+            <![CDATA[  
+             and t.isVisible=#{isVisible}
+            ]]>  
+        </if>   
+        <if test="insertUser != null and '' != insertUser">  
+            <![CDATA[  
+             and t.insertUser=#{insertUser}
+            ]]>  
+        </if>       
+        order by t.updateTime desc
+        <if test="pageStart != null and pageSize !=null and pageSize != 0">
+			limit #{pageStart},#{pageSize}
+		</if>
+	</select>
+	<select id="findPageCount"  resultType="Integer" parameterType="Page">
+		select count(1) count from (select t.id,t.title,t.comment,t.code,groupId,t.projectId,t.isVisible,tg.name groupName,c.name projectName, tg2.name parentGroupName 
+		from t_page t 
+		left join t_group tg on t.groupId=tg.id
+		left join t_group tg2 on tg.parentGroupId=tg2.id
+		left join t_project c on t.projectId=c.id
+		where 1=1 
+		<if test="title != null and '' != title">  
+            <![CDATA[  
+              AND t.title  like concat('%',#{title},'%')
+            ]]>  
+        </if>
+		<if test="projectId != null and '' != projectId">  
+            <![CDATA[  
+              AND t.projectId = #{projectId}  
+            ]]>  
+        </if>
+        <if test="groupId != null and '' != groupId">  
+            <![CDATA[  
+              AND t.groupId = #{groupId}
+            ]]>  
+        </if> 
+        <if test="isVisible != null and '' != isVisible">  
+            <![CDATA[  
+             and t.isVisible=#{isVisible}
+            ]]>  
+        </if>   
+        <if test="insertUser != null and '' != insertUser">  
+            <![CDATA[  
+             and t.insertUser=#{insertUser}
+            ]]>  
+        </if>
+        )tt
+	</select>
+	<insert id="insertPage" parameterType="Page">
+		insert into t_page(title,comment,groupId,projectId,isVisible,insertTime,updateTime,insertUser,updateUser)
+		values(#{title},#{comment},#{groupId},#{projectId},#{isVisible},#{insertTime,jdbcType=TIMESTAMP},#{updateTime,jdbcType=TIMESTAMP},#{insertUser},#{updateUser})
+		<selectKey resultType="Integer" keyProperty="id" order="AFTER">  
+        	SELECT LAST_INSERT_ID() AS id  
+    	</selectKey> 
+	</insert>
+	<select id="findPageById" parameterType="int" resultMap="resultMapPage">
+		select t.*,tg.parentGroupId from t_page t
+		left join t_group tg on t.groupId=tg.id
+		 where t.id=#{id}
+	</select>
+	<update id="updatePage" parameterType="Page">
+		update t_page set  title=#{title}, comment=#{comment}
+		<if test="code != null and '' != code">  
+            <![CDATA[  
+             	, code=#{code}
+            ]]>  
+        </if>
+		, projectId=#{projectId}, groupId=#{groupId},isVisible=#{isVisible},updateTime=#{updateTime,jdbcType=TIMESTAMP}, updateUser=#{updateUser} where id=#{id}
+	</update>
+	<delete id="deletePageById" parameterType="Integer">
+		delete from t_page where id=#{id}
+	</delete>
+	<select id="findPageForScript"  resultMap="resultMapPage" parameterType="page">
+		select * from t_page t where 1=1 
+		<if test="projectId != null and '' != projectId">  
+            <![CDATA[  
+              AND t.projectId = #{projectId}  
+            ]]>  
+        </if>
+        <if test="groupId != null and '' != groupId">  
+            <![CDATA[  
+              AND t.groupId = #{groupId}  
+            ]]>  
+        </if>    
+	</select>
+</mapper>  
+

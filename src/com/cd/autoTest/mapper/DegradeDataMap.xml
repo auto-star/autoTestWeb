@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC 
+"-//mybatis.org//DTD Mapper 3.0//EN" 
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.cd.autoTest.dao.DegradeDataDAO">
+	<resultMap type="DegradeData" id="resultMapDegradeData">
+		<id property="id" column="id" />
+		<result property="runCaseResultId" column="runCaseResultId" />
+		<result property="casePageName" column="casePageName" />
+		<result property="itemName" column="itemName" />
+		<result property="pageValue" column="pageValue" />
+		<result property="isCompare" column="isCompare" />
+	</resultMap>
+	<select id="findDegradeDataList" resultMap="resultMapDegradeData" parameterType="Integer" >
+		select t.id,t.runCaseResultId,t.casePageName,t.itemName,t.pageValue,t.isCompare from t_runcaseresultdata t 
+		where t.runCaseResultId=#{runCaseResultId}
+		order by t.id ASC
+	</select>
+	
+</mapper>  
+

@@ -1,0 +1,115 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC 
+"-//mybatis.org//DTD Mapper 3.0//EN" 
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.cd.autoTest.dao.BaseCaseDAO">
+	<resultMap type="BaseCase" id="resultMap">
+		<id property="id" column="id" />
+		<result property="name" column="name" />
+		<result property="comment" column="comment" />
+		<result property="groupId" column="groupId" />
+		<result property="groupName" column="groupName" />
+		<result property="parentGroupName" column="parentGroupName" />
+		<result property="projectId" column="projectId" />
+		<result property="projectName" column="projectName" />
+		<result property="userId" column="userId" />
+		<result property="userName" column="userName" />
+		<result property="status" column="status" />
+		<result property="caseId" column="caseId" />
+		<result property="kind" column="kind" />
+		<result property="sort" column="sort" />
+	</resultMap>
+	<select id="findBaseCaseListByCaseId" resultMap="resultMap">
+		select t.*,tg.name groupName,tc.name projectName,tu.name userName,tg2.name parentGroupName from t_basecase t
+		left join t_group tg on t.groupId=tg.id
+		left join t_group tg2 on tg.parentGroupId=tg2.id
+		left join t_project tc on tg.projectId=tc.id
+		left join t_user tu on t.userId=tu.id
+		where t.caseId=#{caseId} order by t.sort
+	</select>
+	<select id="findBaseCaseById"  parameterType="Integer"  resultMap="resultMap">
+		select t.*,tg.parentGroupId from t_basecase t 
+		left join t_group tg on t.groupId=tg.id
+		where t.id=#{id};
+	</select>
+	<select id="findBaseCaseList"  parameterType="BaseCase"  resultMap="resultMap">
+		select t.*,tg.name groupName,tc.name projectName,tu.name userName,tg2.name parentGroupName from t_basecase t
+		left join t_group tg on t.groupId=tg.id
+		left join t_group tg2 on tg.parentGroupId=tg2.id
+		left join t_project tc on tg.projectId=tc.id
+		left join t_user tu on t.userId=tu.id where 1=1
+		<if test="projectId != null and '' != projectId">  
+            <![CDATA[  
+              AND t.projectId = #{projectId,javaType=Integer, jdbcType=INTEGER}  
+            ]]>  
+        </if>
+        <if test="groupId != null and '' != groupId">  
+            <![CDATA[  
+              AND t.groupId = #{groupId,javaType=Integer, jdbcType=INTEGER}  
+            ]]>  
+        </if>
+         <if test="caseId != null">  
+            <![CDATA[  
+              AND t.caseId = #{caseId,javaType=Integer, jdbcType=INTEGER}  
+            ]]>  
+        </if> 
+        <if test="userId != null and '' != userId">  
+            <![CDATA[  
+              AND t.userId = #{userId,javaType=Integer, jdbcType=INTEGER}  
+            ]]>  
+        </if>    
+         order by t.sort   
+	</select>
+	<insert id="insertBaseCase" parameterType="BaseCase">
+		insert into t_basecase(name,comment,groupId,projectId,userId,status,caseId,kind,sort)
+		values(#{name},#{comment},#{groupId},#{projectId},#{userId},#{status},#{caseId},#{kind},#{sort})
+		<selectKey resultType="Integer" keyProperty="id" order="AFTER">  
+        	SELECT LAST_INSERT_ID() AS id  
+    	</selectKey>  
+	</insert>
+	<delete id="deleteBaseCase" parameterType="Integer">
+		delete from t_basecase where id=#{id}
+	</delete>
+	<delete id="deleteBaseCaseByCaseId" parameterType="Integer">
+		delete from t_basecase where caseid=#{caseId}
+	</delete>
+	<update id="updateBaseCase" parameterType="BaseCase">
+		update t_basecase set name=#{name} , comment=#{comment} ,
+		groupId=#{groupId} ,projectId=#{projectId},status=#{status},kind=#{kind}
+		<if test="sort != null and '' != sort">  
+            <![CDATA[  
+             	,sort=#{sort}
+            ]]>
+		</if>
+		where id=#{id}
+	</update>
+	<select id="findBaseCase"  parameterType="BaseCase"  resultMap="resultMap">
+		select * from t_basecase t where 1=1
+		<if test="id != null and '' != id">  
+            <![CDATA[  
+              AND t.id = #{id}  
+            ]]>  
+        </if>   
+		<if test="caseId != null and '' != caseId">  
+            <![CDATA[  
+              AND t.caseId = #{caseId}  
+            ]]>  
+        </if>
+        <if test="sort != null and '' != sort">  
+            <![CDATA[  
+              AND t.sort = #{sort}  
+            ]]>  
+        </if>
+              
+	</select>
+	<update id="updateBaseCaseSortAdd" parameterType="BaseCase">
+		update t_basecase set sort=sort+1 where sort>#{sort} and caseId=#{caseId}
+	</update>
+	<update id="updateBaseCaseSortMinus" parameterType="BaseCase">
+		update t_basecase set sort=sort-1 where sort>#{sort} and caseId=#{caseId}
+	</update>
+	<select id="findMaxSort"  parameterType="Integer" resultType="Integer">
+		select IFNULL(MAX(SORT),0) sort from t_basecase t where 1=1 and t.caseId=#{caseId}
+	</select>
+</mapper>  
+

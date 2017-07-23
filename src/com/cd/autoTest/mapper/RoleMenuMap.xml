@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC 
+"-//mybatis.org//DTD Mapper 3.0//EN" 
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.cd.autoTest.dao.RoleMenuDAO">
+	<resultMap type="RoleMenu" id="resultMap">
+		<id property="id" column="id" />
+		<result property="roleId" column="roleId" />
+		<result property="menuId" column="menuId" />
+	</resultMap>
+	<select id="findRoleMenuList" resultMap="resultMap">
+		select * from t_rolemenu
+		
+	</select>
+	<select id="findRoleMenuListByRoleId" resultMap="resultMap">
+		select * from t_rolemenu t where t.roleId=#{roleId}
+		
+	</select>
+	<insert id="insertRoleMenu" parameterType="RoleMenu">
+		insert into t_rolemenu(roleId,menuId)
+		values(#{roleId},#{menuId})
+	</insert>
+	<delete id="deleteRoleMenuByRoleId" parameterType="Integer">
+		delete from t_rolemenu where roleId=#{roleId}
+	</delete>
+	
+</mapper>  
+

@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC 
+"-//mybatis.org//DTD Mapper 3.0//EN" 
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.cd.autoTest.dao.ProjectDAO">
+	<resultMap type="Project" id="resultMap">
+		<id property="id" column="id" />
+		<result property="name" column="name" />
+		<result property="code" column="code" />
+		<result property="insertUser" column="insertUser" />
+		<result property="insertTime" column="insertTime" />
+		<result property="updateUser" column="updateUser" />
+		<result property="updateTime" column="updateTime" />
+	</resultMap>
+	<select id="findProjectList" resultMap="resultMap" parameterType="Project" >
+		select t.* from t_project t where 1=1
+        <if test="name != null and '' != name">  
+            <![CDATA[  
+              and t.name like concat('%',#{name},'%')
+            ]]>  
+        </if>
+		order  by id asc
+	</select>
+	<select id="findProjectCount" resultType="Integer"  parameterType="Project" >
+		select count(1) from (select t.* from t_project t where 1=1
+        <if test="name != null and '' != name">  
+            <![CDATA[  
+              and t.name like concat('%',#{name},'%')
+            ]]>  
+        </if>
+		)tt
+	</select>
+	<select id="findProjectById" parameterType="Integer"  resultMap="resultMap">
+		select * from t_Project t where t.id=#{id}
+	</select>
+	<insert id="insertProject" parameterType="Project">
+		insert into t_Project(name,code,insertUser,updateUser,insertTime,updateTime)
+		values(#{name},#{code},#{insertUser},#{updateUser},#{insertTime,jdbcType=TIMESTAMP},#{updateTime,jdbcType=TIMESTAMP})
+		<selectKey resultType="Integer" keyProperty="id" order="AFTER">  
+        	SELECT LAST_INSERT_ID() AS id  
+    	</selectKey> 
+	</insert>
+	<delete id="deleteProject" parameterType="Integer">
+		delete from t_Project where id=#{id}
+	</delete>
+	<update id="updateProject" parameterType="Project">
+		update t_Project set name=#{name},updateUser=#{updateUser} ,updateTime=#{updateTime,jdbcType=TIMESTAMP}
+		where id=#{id}
+	</update>
+</mapper>  
+

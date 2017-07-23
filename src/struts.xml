@@ -1,0 +1,360 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE struts PUBLIC
+	"-//Apache Software Foundation//DTD Struts Configuration 2.3//EN"
+	"http://struts.apache.org/dtds/struts-2.3.dtd">
+
+<struts>
+	<constant name="strtus.i18n.encoding" value="UTF-8" />
+	<package name="default" namespace="/" extends="struts-default">
+	<!-- 定义一个拦截器 -->
+		<interceptors>
+			<interceptor name="sessionout" class="com.cd.autoTest.interceptor.SessionIterceptor"></interceptor>
+			<!-- 拦截器栈 -->
+			<interceptor-stack name="mydefault">
+				<interceptor-ref name="defaultStack" />
+				<interceptor-ref name="sessionout" />
+			</interceptor-stack>
+		</interceptors>
+		<default-interceptor-ref name="mydefault" />
+		<!-- 定义全局Result -->
+		<global-results>
+			<!-- 当返回login视图名时，转入/login.jsp页面 -->
+			<result name="login">/index.jsp</result>
+		</global-results>
+		<action name="welcome" class="com.cd.autoTest.action.UserAction" method="welcome">
+			<result>/jsp/welcome.jsp</result>
+		</action>
+		<action name="main" class="com.cd.autoTest.action.UserAction" method="redirectToMain">
+			<result name="success">/jsp/index.jsp</result>
+			<result name="login">/index.jsp</result>
+		</action>
+
+		<action name="loginAction" class="com.cd.autoTest.action.UserAction" method="login">
+			<result name="success" type="redirect">main</result>
+			<result name="login">/index.jsp</result>
+			<result name="error">/login.jsp</result>
+		</action>
+	</package>
+	<package name="user" namespace="/user" extends="struts-default">
+		<action name="initUser" class="com.cd.autoTest.action.UserAction" method="initUser">
+			<result name="success">/jsp/user/userList.jsp</result>
+		</action>
+		<action name="findUserList" class="com.cd.autoTest.action.UserAction" method="findUserList">
+		</action>
+		<action name="deleteUser" class="com.cd.autoTest.action.UserAction" method="deleteUser">
+		</action>
+		<action name="insertUser" class="com.cd.autoTest.action.UserAction" method="insertUser">
+		</action>
+		<action name="updateUser" class="com.cd.autoTest.action.UserAction" method="updateUser">
+		</action>
+		<action name="findUserById" class="com.cd.autoTest.action.UserAction" method="findUserById">
+		</action>
+		<action name="initUserGroup" class="com.cd.autoTest.action.UserAction" method="initUserGroup">
+			<result name="success">/jsp/user/userGroupList.jsp</result>
+		</action>
+		<action name="findUserGroupList" class="com.cd.autoTest.action.UserAction" method="findUserGroupList">
+		</action>
+		<action name="insertUserGroup" class="com.cd.autoTest.action.UserAction" method="insertUserGroup">
+		</action>
+		<action name="deleteUserGroup" class="com.cd.autoTest.action.UserAction" method="deleteUserGroup">
+		</action>
+		<action name="updateUserGroup" class="com.cd.autoTest.action.UserAction" method="updateUserGroup">
+		</action>
+		<action name="updateUserGroup" class="com.cd.autoTest.action.UserAction" method="updateUserGroup">
+		</action>
+		<action name="findUserGroupById" class="com.cd.autoTest.action.UserAction" method="findUserGroupById">
+		</action>
+		<action name="logout" class="com.cd.autoTest.action.UserAction" method="logout">
+		</action>
+	</package>
+	<package name="page" namespace="/page" extends="struts-default">
+		<action name="initPage" class="com.cd.autoTest.action.PageAction" method="initPage">
+			<result name="success">/jsp/page/pageList.jsp</result>
+		</action>
+		<action name="findPageList" class="com.cd.autoTest.action.PageAction" method="findPageList">
+		</action>
+		<action name="insertPage" class="com.cd.autoTest.action.PageAction" method="insertPage">
+		</action>
+		<action name="copyPage" class="com.cd.autoTest.action.PageAction" method="copyPage">
+		</action>
+		<action name="deletePageById" class="com.cd.autoTest.action.PageAction" method="deletePageById">
+		</action>
+		<action name="findPageById" class="com.cd.autoTest.action.PageAction" method="findPageById">
+		</action>
+		<action name="updatePage" class="com.cd.autoTest.action.PageAction" method="updatePage">
+		</action>
+		<action name="initAction" class="com.cd.autoTest.action.ActionAction" method="initAction">
+			<result name="success">/jsp/page/actionList.jsp</result>
+		</action>
+		<action name="findActionList" class="com.cd.autoTest.action.ActionAction" method="findActionList">
+		</action>
+		<action name="insertAction" class="com.cd.autoTest.action.ActionAction" method="insertAction">
+		</action>
+		<action name="deleteAction" class="com.cd.autoTest.action.ActionAction" method="deleteAction">
+		</action>
+		<action name="findActionById" class="com.cd.autoTest.action.ActionAction" method="findActionById">
+		</action>
+		<action name="updateAction" class="com.cd.autoTest.action.ActionAction" method="updateAction">
+		</action>
+		<action name="deleteCheckAction" class="com.cd.autoTest.action.ActionAction" method="deleteCheckAction">
+		</action>
+		<action name="findGroupList" class="com.cd.autoTest.action.PageAction" method="findGroupList">
+		</action>
+		<action name="initDataMap" class="com.cd.autoTest.action.DataMapAction" method="initDataMap">
+			<result name="success">/jsp/page/dataMapList.jsp</result>
+		</action>
+		<action name="findDataMapListByPageId" class="com.cd.autoTest.action.DataMapAction" method="findDataMapListByPageId">
+		</action>
+		<action name="updateDataMapSort" class="com.cd.autoTest.action.DataMapAction" method="updateDataMapSort">
+		</action>
+		<action name="updateDataMapCode" class="com.cd.autoTest.action.DataMapAction" method="updateDataMapCode">
+		</action>
+		<action name="initContext" class="com.cd.autoTest.action.PageAction" method="initContext">
+			<result name="success">/jsp/page/contextList.jsp</result>
+		</action>
+		<action name="findContextList" class="com.cd.autoTest.action.PageAction" method="findContextList">
+		</action>
+		<action name="insertContext" class="com.cd.autoTest.action.PageAction" method="insertContext">
+		</action>
+		<action name="deleteContext" class="com.cd.autoTest.action.PageAction" method="deleteContext">
+		</action>
+		<action name="findContextById" class="com.cd.autoTest.action.PageAction" method="findContextById">
+		</action>
+		<action name="updateContext" class="com.cd.autoTest.action.PageAction" method="updateContext">
+		</action>
+		<action name="initElement" class="com.cd.autoTest.action.ElementAction" method="initElement">
+			<result name="success">/jsp/page/elementList.jsp</result>
+		</action>
+		<action name="findElementListByPageId" class="com.cd.autoTest.action.ElementAction" method="findElementListByPageId">
+		</action>
+		<action name="deleteElement" class="com.cd.autoTest.action.ElementAction" method="deleteElement">
+		</action>
+		<action name="findElementById" class="com.cd.autoTest.action.ElementAction" method="findElementById">
+		</action>
+		<action name="updateElement" class="com.cd.autoTest.action.ElementAction" method="updateElement">
+		</action>
+		<action name="insertElement" class="com.cd.autoTest.action.ElementAction" method="insertElement">
+		</action>
+	</package>
+
+	<package name="case" namespace="/case" extends="struts-default">
+		<action name="initCase" class="com.cd.autoTest.action.CaseAction" method="initCase">
+			<result name="success">/jsp/case/caseList.jsp</result>
+		</action>
+		<action name="findCaseList" class="com.cd.autoTest.action.CaseAction" method="findCaseList">
+		</action>
+		<action name="insertCase" class="com.cd.autoTest.action.CaseAction" method="insertCase">
+		</action>
+		<action name="copyCase" class="com.cd.autoTest.action.CaseAction" method="copyCase">
+		</action>
+		<action name="copyCheckCase" class="com.cd.autoTest.action.CaseAction" method="copyCheckCase">
+		</action>
+		<action name="deleteCase" class="com.cd.autoTest.action.CaseAction" method="deleteCase">
+		</action>
+		<action name="updateCase" class="com.cd.autoTest.action.CaseAction" method="updateCase">
+		</action>
+		<action name="findCaseById" class="com.cd.autoTest.action.CaseAction" method="findCaseById">
+		</action>
+		<action name="initBaseCase" class="com.cd.autoTest.action.BaseCaseAction" method="initBaseCase">
+			<result name="success">/jsp/case/baseCaseList.jsp</result>
+		</action>
+		<action name="initBaseCaseDetail" class="com.cd.autoTest.action.BaseCaseAction" method="initBaseCaseDetail">
+			<result name="success">/jsp/case/baseCaseDetail.jsp</result>
+		</action>
+		<action name="insertCasePage" class="com.cd.autoTest.action.BaseCaseAction" method="insertCasePage">
+		</action>
+		<action name="deleteCasePage" class="com.cd.autoTest.action.BaseCaseAction" method="deleteCasePage">
+		</action>
+		<action name="findCasePageListByBaseCaseId" class="com.cd.autoTest.action.BaseCaseAction" method="findCasePageListByBaseCaseId">
+		</action>
+		<action name="findBaseCaseListByCaseId" class="com.cd.autoTest.action.BaseCaseAction" method="findBaseCaseListByCaseId">
+		</action>
+		<action name="findBaseCaseList" class="com.cd.autoTest.action.BaseCaseAction" method="findBaseCaseList">
+		</action>
+		<action name="insertBaseCase" class="com.cd.autoTest.action.BaseCaseAction" method="insertBaseCase">
+		</action>
+		<action name="deleteBaseCase" class="com.cd.autoTest.action.BaseCaseAction" method="deleteBaseCase">
+		</action>
+		<action name="updateBaseCase" class="com.cd.autoTest.action.BaseCaseAction" method="updateBaseCase">
+		</action>
+		<action name="updateBaseCaseSort" class="com.cd.autoTest.action.BaseCaseAction" method="updateBaseCaseSort">
+		</action>
+		<action name="findPageList" class="com.cd.autoTest.action.BaseCaseAction" method="findPageList">
+		</action>
+		<action name="findBaseCaseById" class="com.cd.autoTest.action.BaseCaseAction" method="findBaseCaseById">
+		</action>
+		<action name="findGroupList" class="com.cd.autoTest.action.BaseCaseAction" method="findGroupList">
+		</action>
+		<action name="updateCaseData" class="com.cd.autoTest.action.BaseCaseAction" method="updateCaseData">
+		</action>
+		<action name="copyBaseCase" class="com.cd.autoTest.action.BaseCaseAction" method="copyBaseCase">
+		</action>
+		<action name="findPageById" class="com.cd.autoTest.action.BaseCaseAction" method="findPageById">
+		</action>
+		<action name="findCasePageList" class="com.cd.autoTest.action.BaseCaseAction" method="findCasePageList">
+		</action>
+		<action name="initRunCaseResult" class="com.cd.autoTest.action.CaseAction" method="initRunCaseResult">
+			<result name="success">/jsp/case/runCaseResultList.jsp</result>
+		</action>
+		<action name="findRunCaseResultList" class="com.cd.autoTest.action.CaseAction" method="findRunCaseResultList">
+		</action>
+		<action name="downloadFile" class="com.cd.autoTest.action.CaseAction" method="downloadFile">
+			<result name="success" type="stream">
+				<param name="contentType">application/vnd.ms-excel;charset=UTF-8</param>
+				<param name="inputName">downloadFileStream</param>
+				<param name="contentDisposition">
+					attachment;filename=${downloadFileName}
+				</param>
+				<param name="bufferSize">1024</param>
+			</result>
+		</action>
+		<action name="downloadLogFile" class="com.cd.autoTest.action.CaseAction" method="downloadLogFile">
+			<result name="success" type="stream">
+				<param name="contentType">aplication/octet-stream;charset=UTF-8</param>
+				<param name="inputName">downloadFileStream</param>
+				<param name="contentDisposition">
+					attachment;filename=${downloadFileName}
+				</param>
+				<param name="bufferSize">1024</param>
+			</result>
+		</action>
+		<action name="downloadDegradeFile" class="com.cd.autoTest.action.DegradeAction" method="downloadDegradeFile">
+			<result name="success" type="stream">
+				<param name="contentType">aplication/octet-stream;charset=UTF-8</param>
+				<param name="inputName">downloadFileStream</param>
+				<param name="contentDisposition">
+					attachment;filename=${downloadFileName}
+				</param>
+				<param name="bufferSize">1024</param>
+			</result>
+		</action>
+		<action name="insertRunCaseResult" class="com.cd.autoTest.action.CaseAction" method="insertRunCaseResult">
+		</action>
+		<action name="deleteRunCaseResult" class="com.cd.autoTest.action.CaseAction" method="deleteRunCaseResult">
+		</action>
+		<action name="initStrategy" class="com.cd.autoTest.action.StrategyAction" method="initStrategy">
+			<result name="success">/jsp/case/strategyList.jsp</result>
+		</action>
+		<action name="findStrategyList" class="com.cd.autoTest.action.StrategyAction" method="findStrategyList">
+		</action>
+		<action name="insertStrategy" class="com.cd.autoTest.action.StrategyAction" method="insertStrategy">
+		</action>
+		<action name="deleteStrategy" class="com.cd.autoTest.action.StrategyAction" method="deleteStrategy">
+		</action>
+		<action name="initDegrade" class="com.cd.autoTest.action.DegradeAction" method="initDegrade">
+			<result name="success">/jsp/case/degradeList.jsp</result>
+		</action>
+		<action name="findDegradeList" class="com.cd.autoTest.action.DegradeAction" method="findDegradeList">
+		</action>
+		<action name="compare" class="com.cd.autoTest.action.DegradeAction" method="compare">
+		</action>
+	</package>
+	<package name="manage" namespace="/manage" extends="struts-default">
+		<action name="initGroup" class="com.cd.autoTest.action.ManageAction" method="initGroup">
+			<result name="success">/jsp/management/groupManagement.jsp</result>
+		</action>
+		<action name="findGroupListByProjectId" class="com.cd.autoTest.action.ManageAction" method="findGroupListByProjectId">
+		</action>
+		<action name="insertGroup" class="com.cd.autoTest.action.ManageAction" method="insertGroup">
+		</action>
+		<action name="updateGroup" class="com.cd.autoTest.action.ManageAction" method="updateGroup">
+		</action>
+		<action name="findGroupById" class="com.cd.autoTest.action.ManageAction" method="findGroupById">
+		</action>
+		<action name="findGroupByCode" class="com.cd.autoTest.action.ManageAction" method="findGroupByCode">
+		</action>
+		<action name="deleteGroup" class="com.cd.autoTest.action.ManageAction" method="deleteGroup">
+		</action>
+		<action name="initCategory" class="com.cd.autoTest.action.ManageAction" method="initCategory">
+			<result name="success">/jsp/management/categoryManagement.jsp</result>
+		</action>
+		<action name="findCategoryListByUserId" class="com.cd.autoTest.action.ManageAction" method="findCategoryListByUserId">
+		</action>
+		<action name="insertCategory" class="com.cd.autoTest.action.ManageAction" method="insertCategory">
+		</action>
+		<action name="findCategoryById" class="com.cd.autoTest.action.ManageAction" method="findCategoryById">
+		</action>
+		<action name="updateCategory" class="com.cd.autoTest.action.ManageAction" method="updateCategory">
+		</action>
+		<action name="deleteCategory" class="com.cd.autoTest.action.ManageAction" method="deleteCategory">
+		</action>
+		<action name="initEnvironment" class="com.cd.autoTest.action.ManageAction" method="initEnvironment">
+			<result name="success">/jsp/management/environmentManagement.jsp</result>
+		</action>
+		<action name="findEnvironmentList" class="com.cd.autoTest.action.ManageAction" method="findEnvironmentList">
+		</action>
+		<action name="insertEnvironment" class="com.cd.autoTest.action.ManageAction" method="insertEnvironment">
+		</action>
+		<action name="findEnvironmentById" class="com.cd.autoTest.action.ManageAction" method="findEnvironmentById">
+		</action>
+		<action name="findEnvironmentListByProjectId" class="com.cd.autoTest.action.ManageAction" method="findEnvironmentListByProjectId">
+		</action>
+		<action name="updateEnvironment" class="com.cd.autoTest.action.ManageAction" method="updateEnvironment">
+		</action>
+		<action name="deleteEnvironment" class="com.cd.autoTest.action.ManageAction" method="deleteEnvironment">
+		</action>
+		<action name="initClient" class="com.cd.autoTest.action.ClientAction" method="initClient">
+			<result name="success">/jsp/management/clientManagement.jsp</result>
+		</action>
+		<action name="findClientList" class="com.cd.autoTest.action.ClientAction" method="findClientList">
+		</action>
+		<action name="insertClient" class="com.cd.autoTest.action.ClientAction" method="insertClient">
+		</action>
+		<action name="findClientById" class="com.cd.autoTest.action.ClientAction" method="findClientById">
+		</action>
+		<action name="updateClient" class="com.cd.autoTest.action.ClientAction" method="updateClient">
+		</action>
+		<action name="deleteClient" class="com.cd.autoTest.action.ClientAction" method="deleteClient">
+		</action>
+		<action name="initProject" class="com.cd.autoTest.action.ProjectAction" method="initProject">
+			<result name="success">/jsp/management/projectManagement.jsp</result>
+		</action>
+		<action name="findProjectList" class="com.cd.autoTest.action.ProjectAction" method="findProjectList">
+		</action>
+		<action name="insertProject" class="com.cd.autoTest.action.ProjectAction" method="insertProject">
+		</action>
+		<action name="findProjectById" class="com.cd.autoTest.action.ProjectAction" method="findProjectById">
+		</action>
+		<action name="deleteProject" class="com.cd.autoTest.action.ProjectAction" method="deleteProject">
+		</action>
+		<action name="updateProject" class="com.cd.autoTest.action.ProjectAction" method="updateProject">
+		</action>
+		<action name="insertEnvironmentInformation" class="com.cd.autoTest.action.EnvironmentInformationAction" method="insertEnvironmentInformation">
+		</action>
+	</package>
+	<package name="authority" namespace="/authority" extends="struts-default">
+		<action name="initRole" class="com.cd.autoTest.action.RoleAction" method="initRole">
+			<result name="success">/jsp/authority/roleList.jsp</result>
+		</action>
+		<action name="findRoleList" class="com.cd.autoTest.action.RoleAction" method="findRoleList">
+		</action>
+		<action name="findRoleById" class="com.cd.autoTest.action.RoleAction" method="findRoleById">
+		</action>
+		<action name="updateRole" class="com.cd.autoTest.action.RoleAction" method="updateRole">
+		</action>
+		<action name="deleteRole" class="com.cd.autoTest.action.RoleAction" method="deleteRole">
+		</action>
+		<action name="insertRole" class="com.cd.autoTest.action.RoleAction" method="insertRole">
+		</action>
+		<action name="initMenu" class="com.cd.autoTest.action.MenuAction" method="initMenu">
+			<result name="success">/jsp/authority/menuList.jsp</result>
+		</action>
+		<action name="findMenuList" class="com.cd.autoTest.action.MenuAction" method="findMenuList">
+		</action>
+		<action name="findMenuById" class="com.cd.autoTest.action.MenuAction" method="findMenuById">
+		</action>
+		<action name="updateMenu" class="com.cd.autoTest.action.MenuAction" method="updateMenu">
+		</action>
+		<action name="deleteMenu" class="com.cd.autoTest.action.MenuAction" method="deleteMenu">
+		</action>
+		<action name="insertMenu" class="com.cd.autoTest.action.MenuAction" method="insertMenu">
+		</action>
+		<action name="initRoleMenu" class="com.cd.autoTest.action.RoleMenuAction" method="initRoleMenu">
+			<result name="success">/jsp/authority/roleMenuList.jsp</result>
+		</action>
+		<action name="insertRoleMenu" class="com.cd.autoTest.action.RoleMenuAction" method="insertRoleMenu">
+		</action>
+		<action name="findRoleMenuListByRoleId" class="com.cd.autoTest.action.RoleMenuAction" method="findRoleMenuListByRoleId">
+		</action>
+	</package>
+</struts>

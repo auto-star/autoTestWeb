@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC 
+"-//mybatis.org//DTD Mapper 3.0//EN" 
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.cd.autoTest.dao.CasePageDAO">
+	<resultMap type="CasePage" id="resultMap">
+		<id property="id" column="id" />
+		<result property="scriptId" column="scriptId" />
+		<result property="name" column="name" />
+		<result property="comment" column="comment" />
+		<result property="baseCaseId" column="baseCaseId" />
+		<result property="sort" column="sort" />
+		<result property="parentId" column="parentId" />
+		<result property="userId" column="userId" />
+		<result property="pageCategory" column="pageCategory" />
+	</resultMap>
+	<select id="findCasePageListByBaseCaseId" parameterType="Integer"  resultMap="resultMap">
+		select t.*,tp.category pageCategory from t_casepage t 
+		left join t_page tp on t.pageId=tp.id
+		where t.baseCaseId=#{baseCaseId} order by sort
+	</select>
+	<select id="findParentCasePageListByBaseCaseId" parameterType="Integer"  resultMap="resultMap">
+		select t.*,tp.category pageCategory from t_casepage t 
+		left join t_page tp on t.pageId=tp.id
+		where t.baseCaseId=#{baseCaseId} and t.parentId=0 order by sort
+	</select>
+	<select id="findChildCasePageListByParentId" parameterType="Integer"  resultMap="resultMap">
+		select t.*,tp.category pageCategory from t_casepage t 
+		left join t_page tp on t.pageId=tp.id
+		where t.parentId=#{parentId}
+	</select>
+	<insert id="insertCasePage" parameterType="CasePage">
+		insert into t_casepage(pageId,name,comment,baseCaseId,sort,userId,parentId)
+		values(#{pageId},#{name},#{comment},#{baseCaseId},#{sort},#{userId},#{parentId})
+		<selectKey resultType="Integer" keyProperty="id" order="AFTER">  
+        	SELECT LAST_INSERT_ID() AS id  
+    	</selectKey>  
+	</insert>
+	<select id="findCasePageList" parameterType="CasePage"  resultMap="resultMap">
+		select * from t_casepage t where t.pageId=#{pageId} order by sort
+	</select>
+	<select id="findCasePageById" parameterType="Integer"  resultMap="resultMap">
+		select * from t_casepage t where t.id=#{id}
+	</select>
+	<delete id="deleteCasePageByBaseCaseId" parameterType="Integer">
+		delete from t_casepage where baseCaseId=#{baseCaseId}
+	</delete>
+	<select id="findMaxSort"  parameterType="CasePage" resultType="Integer">
+		select IFNULL(MAX(SORT),0) sort from t_casepage t where 1=1 and t.baseCaseId=#{baseCaseId} and t.parentId=#{parentId}
+	</select>
+	<update id="updateCasePageSort" parameterType="CasePage">
+		update t_casepage set sort=sort+1  where sort>#{sort} and baseCaseId=#{baseCaseId} and parentId=#{parentId}
+	</update>
+	<delete id="deleteCasePage" parameterType="Integer">
+		delete from t_casepage where id=#{id}
+	</delete>
+	<update id="updateCasePageSortMinus" parameterType="CasePage">
+		update t_casepage set sort=sort-1  where sort>#{sort} and baseCaseId=#{baseCaseId} and parentId=#{parentId}
+	</update>
+</mapper>  
+

@@ -1,0 +1,126 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC 
+"-//mybatis.org//DTD Mapper 3.0//EN" 
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.cd.autoTest.dao.RunCaseResultDAO">
+	<resultMap type="RunCaseResult" id="resultMap">
+		<id property="id" column="id" />
+		<result property="caseId" column="caseId" />
+		<result property="caseName" column="caseName" />
+		<result property="categoryId" column="categoryId" />
+		<result property="caseCategory" column="caseCategory" />
+		<result property="caseCategory" column="caseCategory" />
+		<result property="status" column="status" />
+		<result property="resultFile" column="resultFile" />
+		<result property="logFile" column="logFile" />
+		<result property="ip" column="ip" />
+		<result property="environmentId" column="environmentId" />
+		<result property="environmentName" column="environmentName" />
+		<result property="screenShot" column="screenShot" />
+		<result property="userName" column="userName" />
+		<result property="insertUser" column="insertUser" />
+		<result property="insertTime" column="insertTime" />
+		<result property="pageStart" column="pageStart" />
+		<result property="pageSize" column="pageSize" />
+	</resultMap>
+	<select id="findRunCaseResultList" resultMap="resultMap" parameterType="RunCaseResult">
+		select t.*,tc.name caseName,tc2.id categoryId,tc2.name caseCategory,te.name environmentName,tu.name userName 
+		from t_runcaseresult t
+		left join t_case tc on t.caseId=tc.id
+		left join t_category tc2 on tc.category=tc2.id
+		left join t_environment te on t.environmentId=te.id
+		left join t_user tu on t.insertUser=tu.id
+		where 1=1
+		<if test="caseName != null and '' != caseName">
+			and tc.name like concat('%',#{caseName},'%')
+		</if>
+		<if test="insertUser != null and '' != insertUser">
+			and t.insertUser=#{insertUser}
+		</if>
+		<if test="status != null and status !=1000">
+			and t.status=#{status,jdbcType=INTEGER}
+		</if>
+		<if test="categoryId != null and categoryId !=''">
+			and tc2.id=#{categoryId,jdbcType=INTEGER}
+		</if>
+		<if test="environmentId != null and '' != environmentId">
+			and t.environmentId=#{environmentId,jdbcType=INTEGER}
+		</if>
+		<if test="insertTime != null and '' != insertTime">
+			and t.insertTime like concat(date_format(#{insertTime},'%Y-%m-%d'),'%')
+		</if>
+		order by t.updatetime desc
+		<if test="pageStart != null and pageSize !=null">
+			limit #{pageStart},#{pageSize}
+		</if>
+	</select>
+	<select id="findRunCaseResultCount" parameterType="RunCaseResult" resultType="INTEGER">
+		select count(1) count from (select t.*,tc.name caseName,tc2.name caseCategory,te.name environmentName,tu.name userName 
+		from t_runcaseresult t
+		left join t_case tc on t.caseId=tc.id
+		left join t_category tc2 on tc.category=tc2.id
+		left join t_environment te on t.environmentId=te.id
+		left join t_user tu on t.insertUser=tu.id
+		where 1=1
+		<if test="caseName != null and '' != caseName">
+			and tc.name like concat('%',#{caseName},'%')
+		</if>
+		<if test="insertUser != null and '' != insertUser">
+			and t.insertUser=#{insertUser}
+		</if>
+		<if test="status != null and status !=1000">
+			and t.status=#{status,jdbcType=INTEGER}
+		</if>
+		<if test="categoryId != null and categoryId !=''">
+			and tc2.id=#{categoryId,jdbcType=INTEGER}
+		</if>
+		<if test="environmentId != null and '' != environmentId">
+			and t.environmentId=#{environmentId,jdbcType=INTEGER}
+		</if>
+		<if test="insertTime != null and '' != insertTime">
+			and t.insertTime like concat(date_format(#{insertTime},'%Y-%m-%d'),'%')
+		</if>
+		)tt
+	</select>
+	<delete id="deleteRunCaseResult" parameterType="Integer">
+		delete from t_runcaseresult where id=#{id}
+	</delete>
+	<select id="findRunCaseResultById" resultMap="resultMap">
+		select * from t_runcaseresult where id=#{id}
+
+	</select>
+	<select id="findRunCaseResult" resultMap="resultMap">
+		select * from t_runcaseresult where status=0 and ip ='' or ip is null order by updateTime asc limit 1
+
+	</select>
+	<select id="findRunCaseResultByIp" resultMap="resultMap" parameterType="String">
+		select * from t_runcaseresult where status=0 and ip=#{ip} order by updateTime asc limit 1
+	</select>
+	<insert id="insertRunCaseResult" parameterType="RunCaseResult">
+		insert into t_runcaseresult(caseId,status,environmentId,screenShot,ip,insertUser,updateUser,insertTime,updateTime)
+		values(#{caseId},#{status},#{environmentId},#{screenShot},#{ip},#{insertUser},#{updateUser},#{insertTime,jdbcType=TIMESTAMP},#{updateTime,jdbcType=TIMESTAMP})
+		<selectKey resultType="Integer" keyProperty="id" order="AFTER">
+			SELECT LAST_INSERT_ID() AS id
+		</selectKey>
+	</insert>
+	<update id="updateRunCaseResult" parameterType="RunCaseResult">
+		update t_runcaseresult t set
+		<if test="status != null and '' != status">  
+            <![CDATA[  
+             	t.status = #{status}
+            ]]>
+		</if>
+		
+		<if test="resultFile != null and '' != resultFile">  
+            <![CDATA[  
+             	t.resultFile = #{resultFile} 
+            ]]>
+		</if>
+		where id=#{id}
+	</update>
+	<update id="updateRunCaseResultIpAndStatus" parameterType="RunCaseResult">
+		update t_runcaseresult t set t.status = #{status},t.ip = #{ip} 
+		where id=#{id}
+	</update>
+</mapper>  
+

@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC 
+"-//mybatis.org//DTD Mapper 3.0//EN" 
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.cd.autoTest.dao.UserDAO">
+	<resultMap type="User" id="resultMapUser">
+		<id property="id" column="id" />
+		<result property="name" column="name" />
+		<result property="password" column="password" />
+		<result property="userGroupId" column="userGroupId" />
+		<result property="userGroupName" column="userGroupName" />
+		<result property="roleId" column="roleId" />
+		<result property="roleName" column="roleName" />
+	</resultMap>
+	<select id="findUserList" resultMap="resultMapUser">
+		select t.*,tu.name userGroupName,tr.name roleName from t_user t
+		left join t_usergroup tu on t.userGroupId=tu.id
+		left join t_role tr on t.roleId=tr.id
+	</select>
+	<select id="findUserById" parameterType="Integer" resultMap="resultMapUser">
+		select * from t_user where id=#{id}
+	</select>
+	<delete id="deleteUser" parameterType="Integer">
+		delete from t_user where id=#{id}
+	</delete>
+	<insert id="insertUser" parameterType="User">
+		insert into t_user(name,password,userGroupId,roleId)
+		values(#{name},#{password},#{userGroupId},#{roleId})
+	</insert>
+	<update id="updateUser" parameterType="User">
+		update t_user set name=#{name} , password=#{password}, userGroupId=#{userGroupId}, roleId=#{roleId} where id=#{id}
+	</update>
+	<select id="findUserByName" parameterType="String" resultMap="resultMapUser">
+		select * from t_user t where t.name=#{name}
+	</select>
+</mapper>  
+

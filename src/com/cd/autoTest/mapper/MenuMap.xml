@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC 
+"-//mybatis.org//DTD Mapper 3.0//EN" 
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.cd.autoTest.dao.MenuDAO">
+	<resultMap type="Menu" id="resultMap">
+		<id property="id" column="id" />
+		<result property="name" column="name" />
+		<result property="action" column="action" />
+		<result property="level" column="level" />
+		<result property="parentMenuId" column="parentMenuId" />
+		<result property="roleId" column="roleId" />
+	</resultMap>
+	<select id="findMenuList" resultMap="resultMap">
+		select * from t_menu
+		
+	</select>
+	<select id="findParentMenuList" resultMap="resultMap">
+		select * from t_menu t where t.parentMenuId=-1
+		
+	</select>
+	<select id="findMenuListByParentId" resultMap="resultMap">
+		select * from t_menu t where t.parentMenuId=#{parentMenuId}
+	</select>
+	<select id="findParentRoleMenuList" resultMap="resultMap"  parameterType="Menu">
+		select tm.* from t_rolemenu t
+		left join t_menu tm on t.menuId=tm.id
+		where tm.parentMenuId=#{parentMenuId} and t.roleId=#{roleId}
+	</select>
+	<insert id="insertMenu" parameterType="Menu">
+		insert into t_menu(name,action,level,parentMenuId)
+		values(#{name},#{action},#{level},#{parentMenuId})
+	</insert>
+	<update id="updateMenu" parameterType="Menu">
+		update t_menu set name=#{name},action=#{action},level=#{level},parentMenuId=#{parentMenuId} where id=#{id}
+	</update>
+	<select id="findMenuById" parameterType="Integer" resultMap="resultMap">
+		select t.* from t_menu t where t.id=#{id}
+	</select>
+	<delete id="deleteMenu" parameterType="Integer">
+		delete from t_menu where id=#{id}
+	</delete>
+</mapper>  
+

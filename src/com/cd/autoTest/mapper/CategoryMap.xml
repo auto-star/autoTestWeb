@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC 
+"-//mybatis.org//DTD Mapper 3.0//EN" 
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.cd.autoTest.dao.CategoryDAO">
+	<resultMap type="Category" id="resultMap">
+		<id property="id" column="id" />
+		<result property="name" column="name" />
+		<result property="userId" column="userId" />
+	</resultMap>
+	<select id="findCategoryList" resultMap="resultMap" parameterType="Category">
+		select * from t_category t 
+		where 1=1 
+		<if test="userId != null and '' != userId">
+			and t.userId=#{userId}
+		</if>
+	</select>
+	<select id="findCategoryListByUserId" resultMap="resultMap" parameterType="Integer">
+		select * from t_category t where t.userId=#{userId}
+	</select>
+	<insert id="insertCategory" parameterType="Category">
+		insert into t_category(name,userId)
+		values(#{name},#{userId})
+	</insert>
+	<select id="findCategoryById" parameterType="Integer" resultMap="resultMap">
+		select * from t_category t where t.id=#{id}
+	</select>
+	<delete id="deleteCategory" parameterType="Integer">
+		delete from t_category where id=#{id}
+	</delete>
+	<update id="updateCategory" parameterType="Category">
+		update t_category set name=#{name} where id=#{id}
+	</update>
+</mapper>  
+

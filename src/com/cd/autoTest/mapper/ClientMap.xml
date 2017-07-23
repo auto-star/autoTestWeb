@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC 
+"-//mybatis.org//DTD Mapper 3.0//EN" 
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.cd.autoTest.dao.ClientDAO">
+	<resultMap type="Client" id="resultMap">
+		<id property="id" column="id" />
+		<result property="name" column="name" />
+		<result property="ip" column="ip" />
+		<result property="userId" column="userId" />
+		<result property="userName" column="userName" />
+	</resultMap>
+	<select id="findClientList" resultMap="resultMap">
+		select t.*,tu.name userName from t_client t 
+		left join t_user tu on t.userId=tu.id
+		
+	</select>
+	<insert id="insertClient" parameterType="Client">
+		insert into t_client(name,ip,userId)
+		values(#{name},#{ip},#{userId})
+	</insert>
+	<update id="updateClient" parameterType="Client">
+		update t_client set name=#{name},ip=#{ip},userId=#{userId} where id=#{id}
+	</update>
+	<select id="findClientById" parameterType="Integer" resultMap="resultMap">
+		select t.* from t_client t where t.id=#{id}
+	</select>
+	<delete id="deleteClient" parameterType="Integer">
+		delete from t_client where id=#{id}
+	</delete>
+</mapper>  
+

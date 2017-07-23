@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<testng-results skipped="0" failed="0" total="1" passed="1">
+  <reporter-output>
+  </reporter-output>
+  <suite name="Default suite" duration-ms="3123" started-at="2016-12-28T06:42:56Z" finished-at="2016-12-28T06:42:59Z">
+    <groups>
+    </groups>
+    <test name="Default test" duration-ms="3123" started-at="2016-12-28T06:42:56Z" finished-at="2016-12-28T06:42:59Z">
+      <class name="com.cd.test.service.TestUserService">
+        <test-method status="PASS" signature="setUp()[pri:0, instance:com.cd.test.service.TestUserService@1325659a]" name="setUp" is-config="true" duration-ms="2976" started-at="2016-12-28T14:42:56Z" finished-at="2016-12-28T14:42:59Z">
+          <reporter-output>
+          </reporter-output>
+        </test-method> <!-- setUp -->
+        <test-method status="PASS" signature="testFindUserById()[pri:0, instance:com.cd.test.service.TestUserService@1325659a]" name="testFindUserById" duration-ms="115" started-at="2016-12-28T14:42:59Z" finished-at="2016-12-28T14:42:59Z">
+          <reporter-output>
+          </reporter-output>
+        </test-method> <!-- testFindUserById -->
+        <test-method status="PASS" signature="tearDown()[pri:0, instance:com.cd.test.service.TestUserService@1325659a]" name="tearDown" is-config="true" duration-ms="0" started-at="2016-12-28T14:42:59Z" finished-at="2016-12-28T14:42:59Z">
+          <reporter-output>
+          </reporter-output>
+        </test-method> <!-- tearDown -->
+      </class> <!-- com.cd.test.service.TestUserService -->
+    </test> <!-- Default test -->
+  </suite> <!-- Default suite -->
+</testng-results>

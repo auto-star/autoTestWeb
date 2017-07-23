@@ -1,0 +1,92 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC 
+"-//mybatis.org//DTD Mapper 3.0//EN" 
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.cd.autoTest.dao.StrategyDAO">
+	<resultMap type="Strategy" id="resultMap">
+		<id property="id" column="id" />
+		<result property="caseId" column="caseId" />
+		<result property="caseName" column="caseName" />
+		<result property="category" column="category" />
+		<result property="categoryName" column="categoryName" />
+		<result property="executeTime" column="executeTime" />
+		<result property="environmentId" column="environmentId" />
+		<result property="environmentName" column="environmentName" />
+		<result property="screenShot" column="screenShot" />
+		<result property="userId" column="userId" />
+		<result property="userName" column="userName" />
+		<result property="updateTime" column="updateTime" />
+		<result property="pageStart" column="pageStart" />
+		<result property="pageSize" column="pageSize" />
+	</resultMap>
+	<select id="findStrategyList" resultMap="resultMap"  parameterType="Strategy">
+		select t.*,tc.name caseName,tc2.name categoryName,te.name environmentName,tu.name userName from t_strategy t
+		left join t_case tc on t.caseId=tc.id
+		left join t_category tc2 on tc.category=tc2.id
+		left join t_environment te on t.environmentId=te.id
+		left join t_user tu on t.userId=tu.id
+		where 1=1
+		<if test="userId != null and '' != userId">
+			and t.userId=#{userId}
+		</if>
+		<if test="caseName != null and '' != caseName">
+			and tc.name like concat('%',#{caseName},'%')
+		</if>
+		order by t.updateTime desc
+		<if test="pageStart != null and pageSize !=null">
+			limit #{pageStart},#{pageSize}
+		</if>
+	</select>
+	<select id="findStrategyCount" resultType="INTEGER"  parameterType="Strategy">
+		select count(1) count from (select t.*,tc.name caseName,tc2.name categoryName,te.name environmentName,tu.name userName 
+		from t_strategy t
+		left join t_case tc on t.caseId=tc.id
+		left join t_category tc2 on tc.category=tc2.id
+		left join t_environment te on t.environmentId=te.id
+		left join t_user tu on t.userId=tu.id
+		where 1=1
+		<if test="userId != null and '' != userId">
+			and t.userId=#{userId}
+		</if>
+		<if test="caseName != null and '' != caseName">
+			and tc.name like concat('%',#{caseName},'%')
+		</if>
+		)tt
+	</select>
+	<select id="findStrategyListByExecuteTime" resultMap="resultMap">
+		select t.* from t_strategy t
+		where t.executeTime=#{executeTime}
+	</select>
+	<delete id="deleteStrategy" parameterType="Integer">
+		delete from t_strategy where id=#{id}
+	</delete>
+	<select id="findStrategyById" resultMap="resultMap">
+		select * from t_strategy where id=#{id}
+
+	</select>
+	<select id="findStrategy" resultMap="resultMap">
+		select * from t_strategy where status=0 order by updateTime asc limit 1
+
+	</select>
+	<insert id="insertStrategy" parameterType="Strategy">
+		insert into t_strategy(caseId,category,executeTime,environmentId,screenShot,userId,updateTime)
+		values(#{caseId},#{category},#{executeTime},#{environmentId},#{screenShot},#{userId},#{updateTime,jdbcType=TIMESTAMP})
+
+	</insert>
+	<update id="updateStrategy" parameterType="Strategy">
+		update t_strategy t set
+		<if test="status != null and '' != status">  
+            <![CDATA[  
+             	t.status = #{status}
+            ]]>
+		</if>
+		
+		<if test="resultFile != null and '' != resultFile">  
+            <![CDATA[  
+             	t.resultFile = #{resultFile} 
+            ]]>
+		</if>
+		where id=#{id}
+	</update>
+</mapper>  
+

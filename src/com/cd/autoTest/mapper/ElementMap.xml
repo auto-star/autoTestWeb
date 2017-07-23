@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC 
+"-//mybatis.org//DTD Mapper 3.0//EN" 
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.cd.autoTest.dao.ElementDAO">
+	<resultMap type="Element" id="resultMap">
+		<id property="id" column="id" />
+		<result property="name" column="name" />
+		<result property="xpath" column="xpath" />
+		<result property="pageId" column="pageId" />
+		<result property="isCompare" column="isCompare" />
+		<result property="contextKey" column="contextKey" />
+		<result property="pageStart" column="pageStart" />
+		<result property="pageSize" column="pageSize" />
+	</resultMap>
+	<select id="findElementList" resultMap="resultMap"  parameterType="Element">
+		select * from t_element t where 1=1   AND t.pageId = #{pageId} 
+        <if test="pageStart != null and pageSize !=null">
+			limit #{pageStart},#{pageSize}
+		</if>
+	</select>
+	<select id="findElementCount" resultType="Integer" parameterType="Element">
+		select count(1) from t_element t where 1=1   AND t.pageId = #{pageId}
+	</select>
+	<select id="findElementListByPageId" resultMap="resultMap"  parameterType="Element">
+		select * from t_element t where 1=1   AND t.pageId = #{pageId}
+	</select>
+	<insert id="insertElement" parameterType="Element">
+		insert into t_element(id,name,xpath,pageId,isCompare,contextKey)
+		values(#{id},#{name},#{xpath},#{pageId},#{isCompare},#{contextKey})
+		<selectKey resultType="Integer" keyProperty="id" order="AFTER">  
+        	SELECT LAST_INSERT_ID() AS id  
+    	</selectKey> 
+	</insert>
+	
+	<select id="findElementById" resultMap="resultMap">
+		select * from t_element t where t.id=#{id}
+	</select>
+	
+	<delete id="deleteElement" parameterType="Integer">
+		delete from t_element where id=#{id}
+	</delete>
+	<update id="updateElement" parameterType="Element">
+		update t_element set name=#{name} , xpath=#{xpath}, 
+		isCompare=#{isCompare},contextKey=#{contextKey} where id=#{id}
+	</update>
+</mapper>  
+
